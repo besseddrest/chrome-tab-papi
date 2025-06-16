@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./styles/papi.css" />
+
+        <script src="./papi.js" defer></script>
+    </head>
+    <body>
+        <h1>Tab Papi</h1>
+        <p>Your girlfriend's favorite tab manager.</p>
+
+        <ul class="tabs">
+            <li id="main" class="active">Current</li>
+            <li id="info">Info</li>
+        </ul>
+        <div class="tab__wrap">
+            <div id="tab--main" class="tab__content tab__content--active">
+                <table id="sites" class="group__table">
+                    <thead>
+                        <tr>
+                            <th>Host</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div id="tab--info" class="tab__content">
+                <ul>
+                    <li>
+                        <strong>T</strong>ab: cycle through Tab Papi extension
+                    </li>
+                    <li>
+                        <strong>Up, Down</strong>: selects the group of tabs you
+                        want to clean up
+                    </li>
+                    <li><strong>R</strong>educe: minimizes to 1</li>
+                    <li><strong>D</strong>elete: deletes all</li>
+                    <li>
+                        <strong>G</strong>roup: groups the tabs together at the
+                        end after all other tabs
+                    </li>
+                    <li><strong>S</strong>plit: opens tabs in own window</li>
+                </ul>
+            </div>
+        </div>
+
+        <template id="tmpl_counts">
+            <tr class="group__record">
+                <td class="group__host"></td>
+                <td class="group__count"></td>
+            </tr>
+        </template>
+    </body>
+</html>

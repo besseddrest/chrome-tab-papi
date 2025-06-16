@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Tab Papi",
+    "version": "1.0",
+    "description": "Manage tab clutter fast, armed with only your keyboard and a small set of commands.",
+    "action": {
+        "default_popup": "papi.html",
+        "default_icon": "images/papi_128.png"
+    },
+    "permissions": [
+        "storage",
+        "tabs"
+    ]
+}
