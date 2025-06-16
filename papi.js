@@ -82,6 +82,7 @@ async function createSummary(windowId) {
             sites.appendChild(newItem);
         }
 
+        // gotta wait til we have data rendered
         addListeners();
     }
 }
@@ -99,7 +100,7 @@ function addListeners() {
 
     let rowIdx = -1;
     const tableRows = document.querySelectorAll(".group__record");
-    console.log(tableRows);
+
     document.addEventListener("keydown", (e) => {
         if (e.key === "Tab") {
             tabIdx = tabIdx === 0 ? 1 : 0;
@@ -118,7 +119,7 @@ function addListeners() {
         }
 
         if (tabIdx === 0) {
-            if (e.key === "ArrowUp") {
+            if (e.key === "ArrowUp" || e.key === "k") {
                 if (rowIdx === 0 || rowIdx === -1) {
                     rowIdx = tableRows.length - 1;
                     tableRows[0].classList.remove("selected");
@@ -127,7 +128,7 @@ function addListeners() {
                     rowIdx--;
                 }
             }
-            if (e.key === "ArrowDown") {
+            if (e.key === "ArrowDown" || e.key === "j") {
                 if (rowIdx === tableRows.length - 1 || rowIdx === -1) {
                     tableRows[tableRows.length - 1].classList.remove(
                         "selected",
