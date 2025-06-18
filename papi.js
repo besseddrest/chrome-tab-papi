@@ -1,5 +1,4 @@
 import createCommands from "./scripts/keybinds.js";
-import { summarizeWindows } from "./scripts/storage.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const tabs = await chrome.tabs.query({});
@@ -7,7 +6,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (tabs) {
         chrome.storage.local.set({ initialTabs: tabs.data }, () => {
             console.log("v2 Initial tab data set in local storage");
-            summarizeWindows(tabs);
         });
     }
 });
@@ -23,31 +21,32 @@ const initPapi = () => {
 
             await saveToLocalStorage(formatted);
 
-            await renderItems();
-
-            createCommands();
+            const currentWin = await chrome.windows.getCurrent();
+            renderItems(currentWin.id).then(() => {
+                createCommands();
+            });
         }
     });
 };
 
-export async function renderItems() {
+export async function renderItems(wid) {
     const data = await chrome.storage.local.get(["formatted"]);
 
     if (data) {
         const sites = document.getElementById("sites");
-        const groups = data.formatted[windowId].items;
+        const group = data.formatted[wid];
 
-        const sorted = Object.values(groups).sort((a, b) => {
-            return b.tabs.length - a.tabs.length;
-        });
+        const items = Object.entries(group.info).sort(
+            (a, b) => b[1].ids.length - a[1].ids.length,
+        );
 
-        for (const group of sorted) {
+        for (const item of items) {
             const tmpl = document.getElementById("tmpl_counts");
             const newItem = tmpl.content.cloneNode(true);
 
-            newItem.querySelector(".group__host").textContent = `${group.name}`;
+            newItem.querySelector(".group__host").textContent = `${item[0]}`;
             newItem.querySelector(".group__count").textContent =
-                `${group.tabs.length}`;
+                `${item[1].ids.length}`;
 
             sites.appendChild(newItem);
         }
@@ -60,13 +59,11 @@ export async function saveToLocalStorage(data) {
 
 function formatTabData(data) {
     const newData = data.reduce((acc, curr) => {
-        const host = new URL(curr.url).hostname;
         const wid = curr.windowId;
 
         if (!acc.hasOwnProperty(wid)) {
             acc[wid] = {
                 wid,
-                name: host,
                 tabs: [],
             };
         }
@@ -75,13 +72,34 @@ function formatTabData(data) {
         return acc;
     }, {});
 
+    for (const obj of Object.values(newData)) {
+        const tabs = [...obj.tabs];
+
+        const info = tabs.reduce((acc, curr) => {
+            const hostname = new URL(curr.url).hostname;
+
+            if (!acc.hasOwnProperty(hostname)) {
+                acc[hostname] = {
+                    ids: [],
+                };
+            }
+            acc[hostname].ids.push(curr.id);
+            return acc;
+        }, {});
+
+        // info.sort((a, b) => b.ids.length - a.ids.length1);
+
+        obj.info = info;
+    }
+
+    // create another property for display
     return newData;
 }
 
 async function getTabs(params) {
     const response = await chrome.tabs.query(params);
 
-    if (response) {
+    if (!response) {
         throw new Error(`Failed to get tabs with params ${params}`);
     }
 
