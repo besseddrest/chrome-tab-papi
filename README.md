@@ -4,11 +4,11 @@ Your girlfriend's favorite tab manager.
 
 ## General
 
-Tab Papi let's you manage you tab clutter with speed. If you are a keyboard
+Tab Papi will help you manage your excessive tab abuse. If you are a keyboard
 focused computer user, you might like this. It's more about needing to close
-a bunch of tabs, rather than grooming them.
+a bunch of tabs, rather than carefully grooming them.
 
-I made this for fun. Hopefully you'll find it useful!
+I made this for fun. I hope you find this useful!
 
 ## Permissions / Disclaimer
 

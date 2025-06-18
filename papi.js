@@ -1,68 +1,38 @@
-document.addEventListener("DOMContentLoaded", () => {
-    getTabs({}, (tabs) => {
-        chrome.storage.local.set({ initialTabs: tabs }, () => {
-            console.log("v2 Initial tab data set in local storage");
+import createCommands from "./scripts/keybinds.js";
+import { summarizeWindows } from "./scripts/storage.js";
 
+document.addEventListener("DOMContentLoaded", async () => {
+    const tabs = await chrome.tabs.query({});
+
+    if (tabs) {
+        chrome.storage.local.set({ initialTabs: tabs.data }, () => {
+            console.log("v2 Initial tab data set in local storage");
             summarizeWindows(tabs);
         });
-    });
+    }
 });
 
-async function summarizeWindows(tabs) {
-    const initial = await chrome.storage.local.get(["initialTabs"]);
-    const formatted = {};
-    let windowIdx = 0;
+const initPapi = () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+        let formatted = null;
+        // fetch and process tab data
+        const tabs = await getTabs({});
 
-    if (initial) {
-        for (let record of initial.initialTabs) {
-            const parentId = record.windowId;
+        if (tabs) {
+            formatted = formatTabData(tabs);
 
-            if (formatted.hasOwnProperty(parentId)) {
-                formatted[parentId].items.push(record);
-            } else {
-                formatted[parentId] = {
-                    name: `Window ${windowIdx + 1}`,
-                    id: parentId,
-                    items: [record],
-                };
-                windowIdx++;
-            }
+            await saveToLocalStorage(formatted);
+
+            await renderItems();
+
+            createCommands();
         }
-
-        summarizeTabs(formatted);
-    } else {
-        // if we don't have it for some reason
-    }
-}
-
-function summarizeTabs(windows) {
-    for (const [_, value] of Object.entries(windows)) {
-        const temp = [...value.items];
-        value.items = {};
-
-        for (let item of temp) {
-            const host = new URL(item.url).hostname;
-
-            if (value.items.hasOwnProperty(host)) {
-                value.items[host].tabs.push(item);
-            } else {
-                value.items[host] = {
-                    name: host,
-                    tabs: [item],
-                };
-            }
-        }
-    }
-
-    chrome.storage.local.set({ formatted: windows }, async () => {
-        console.log("Saved tab data byWindow in local storage");
-        const currentWin = await chrome.windows.getCurrent();
-        createSummary(currentWin.id);
     });
-}
+};
 
-async function createSummary(windowId) {
+export async function renderItems() {
     const data = await chrome.storage.local.get(["formatted"]);
+
     if (data) {
         const sites = document.getElementById("sites");
         const groups = data.formatted[windowId].items;
@@ -81,65 +51,41 @@ async function createSummary(windowId) {
 
             sites.appendChild(newItem);
         }
-
-        // gotta wait til we have data rendered
-        addListeners();
     }
 }
 
-function getTabs(query, cb) {
-    chrome.tabs.query(query, (tabs) => {
-        cb(tabs);
-    });
+export async function saveToLocalStorage(data) {
+    await chrome.storage.local.set({ formatted: data });
 }
 
-function addListeners() {
-    let tabIdx = 0;
-    const tabHeaders = document.querySelectorAll(".tabs li");
-    const tabContent = document.querySelectorAll(".tab__content");
+function formatTabData(data) {
+    const newData = data.reduce((acc, curr) => {
+        const host = new URL(curr.url).hostname;
+        const wid = curr.windowId;
 
-    let rowIdx = -1;
-    const tableRows = document.querySelectorAll(".group__record");
-
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Tab") {
-            tabIdx = tabIdx === 0 ? 1 : 0;
-
-            if (tabIdx === 1) {
-                tabHeaders[0].classList.remove("active");
-                tabContent[0].classList.remove("tab__content--active");
-                tabHeaders[1].classList.add("active");
-                tabContent[1].classList.add("tab__content--active");
-            } else {
-                tabHeaders[1].classList.remove("active");
-                tabContent[1].classList.remove("tab__content--active");
-                tabHeaders[0].classList.add("active");
-                tabContent[0].classList.add("tab__content--active");
-            }
+        if (!acc.hasOwnProperty(wid)) {
+            acc[wid] = {
+                wid,
+                name: host,
+                tabs: [],
+            };
         }
 
-        if (tabIdx === 0) {
-            if (e.key === "ArrowUp" || e.key === "k") {
-                if (rowIdx === 0 || rowIdx === -1) {
-                    rowIdx = tableRows.length - 1;
-                    tableRows[0].classList.remove("selected");
-                } else {
-                    tableRows[rowIdx].classList.remove("selected");
-                    rowIdx--;
-                }
-            }
-            if (e.key === "ArrowDown" || e.key === "j") {
-                if (rowIdx === tableRows.length - 1 || rowIdx === -1) {
-                    tableRows[tableRows.length - 1].classList.remove(
-                        "selected",
-                    );
-                    rowIdx = 0;
-                } else {
-                    tableRows[rowIdx].classList.remove("selected");
-                    rowIdx++;
-                }
-            }
-            tableRows[rowIdx].classList.add("selected");
-        }
-    });
+        acc[wid].tabs.push(curr);
+        return acc;
+    }, {});
+
+    return newData;
 }
+
+async function getTabs(params) {
+    const response = await chrome.tabs.query(params);
+
+    if (response) {
+        throw new Error(`Failed to get tabs with params ${params}`);
+    }
+
+    return response;
+}
+
+initPapi();
