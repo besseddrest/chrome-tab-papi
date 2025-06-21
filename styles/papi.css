@@ -74,8 +74,13 @@ table th {
     font-size: 14px;
 }
 
+table tr {
+    transform: scale(1);
+}
 table tr.selected {
-    outline: 1px solid goldenrod;
+    background-color: goldenrod !important;
+    transform: scale(1.06);
+    transition: transform 0.15s ease-in-out;
 }
 
 table tr:nth-child(even) {

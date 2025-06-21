@@ -22,8 +22,8 @@ const initPapi = () => {
             await saveToLocalStorage(formatted);
 
             const currentWin = await chrome.windows.getCurrent();
-            renderItems(currentWin.id).then(() => {
-                createCommands();
+            renderItems(currentWin.id).then((res) => {
+                createCommands(res.formatted, currentWin.id);
             });
         }
     });
@@ -43,21 +43,24 @@ export async function renderItems(wid) {
         for (const item of items) {
             const tmpl = document.getElementById("tmpl_counts");
             const newItem = tmpl.content.cloneNode(true);
-
-            newItem.querySelector(".group__host").textContent = `${item[0]}`;
+            newItem.querySelector(".group__record").id = item[1].gid;
+            newItem.querySelector(".group__host").textContent =
+                `${item[0]} (${item[1].gid})`;
             newItem.querySelector(".group__count").textContent =
                 `${item[1].ids.length}`;
 
             sites.appendChild(newItem);
         }
     }
+
+    return data;
 }
 
 export async function saveToLocalStorage(data) {
     await chrome.storage.local.set({ formatted: data });
 }
 
-function formatTabData(data) {
+export function formatTabData(data) {
     const newData = data.reduce((acc, curr) => {
         const wid = curr.windowId;
 
@@ -74,20 +77,23 @@ function formatTabData(data) {
 
     for (const obj of Object.values(newData)) {
         const tabs = [...obj.tabs];
+        let group = 0;
 
         const info = tabs.reduce((acc, curr) => {
             const hostname = new URL(curr.url).hostname;
 
             if (!acc.hasOwnProperty(hostname)) {
                 acc[hostname] = {
+                    gid: `g${group}`,
                     ids: [],
                 };
             }
             acc[hostname].ids.push(curr.id);
+            group++;
             return acc;
         }, {});
 
-        // info.sort((a, b) => b.ids.length - a.ids.length1);
+        // info.sort((a, b) => b.ids.length - a.ids.length);
 
         obj.info = info;
     }
@@ -96,7 +102,7 @@ function formatTabData(data) {
     return newData;
 }
 
-async function getTabs(params) {
+export async function getTabs(params) {
     const response = await chrome.tabs.query(params);
 
     if (!response) {
