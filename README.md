@@ -10,9 +10,9 @@ You can easily just close those them - but you don't. You think there's somethin
 
 I made this so I can reduce my tab clutter quickly from my keyboard.
 
-You'll feel semi-accomplished. It's like... doing your laundry but being to lazy to fold it and put it away.
+You'll feel semi-accomplished. It's like... doing your laundry, but you're too lazy to fold it and put it away.
 
-## Permissions / Disclaimer
+## Permissions
 
 You will need to grant Papi permission. It uses the tab URLs in order to sort the data, and then manages that list from local storage.
 
