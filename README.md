@@ -8,11 +8,13 @@ Manage your tab clutter with speed, from your keyboard.
 
 If you use vim, you might like this.
 
-## Permissions
+## Disclaimer
 
-You will need to grant Papi permission. It uses the tab URLs in order to sort the data, and then manages that list from local storage.
+Papi needs permission - it uses the tab URLs in order to sort the data.
 
-It fetches the tab data for the current window everytime you open Tab Papi.
+The data will be fetched every time you open Tab Papi.
+
+While it's open, it manages a simplified dataset in your local storage.
 
 ## Keybinds
 
