@@ -1,14 +1,14 @@
+import { renderItems } from "../papi.js";
 export default function createCommands(tabState, wid) {
-    console.log(tabState);
     let tabIdx = 0;
     let rowIdx = -1;
     const tabHeaders = document.querySelectorAll(".tabs li");
     const tabContent = document.querySelectorAll(".tab__content");
     const tableRows = document.querySelectorAll(".group__record");
 
-    const state = {
+    const selected = {
         gid: null,
-        selected: "",
+        name: "",
         ids: [],
     };
 
@@ -24,71 +24,89 @@ export default function createCommands(tabState, wid) {
             l: () => moveTabsRight(),
             d: () => deleteTabsAll(),
             r: () => reduceTabs(),
-            s: () => splitTabs(),
+            o: () => splitTabs(),
+            1: () => reduceTabsBy(1),
+            2: () => reduceTabsBy(2),
+            3: () => reduceTabsBy(3),
+            4: () => reduceTabsBy(4),
             Tab: () => cycleTabs(),
         };
 
         keybinds[e.key]();
     });
 
-    function cleanPapi() {
-        // TODO
-        // maybe we only need to keep the tab data in local storage up to date
-        // vs query() and setting local storage
+    async function cleanPapi(ids) {
+        const diff = [...selected.ids].filter((item) => !ids.includes(item));
+
+        // TODO: too many states
+        tabState.byHost[selected.hostname].ids = diff;
+        selected.ids = diff;
+
+        await chrome.storage.local
+            .set({ formatted: tabState })
+            .then(async () => {
+                await renderItems(tabState.windowId);
+            });
+    }
+
+    function reduceTabsBy(num) {
+        const ids = selected.ids.splice(0, num);
+        deleteTabs(ids);
     }
 
     function splitTabs() {
-        const newTabs = [...state.ids];
+        const newTabs = [...selected.ids];
         const tabId = newTabs.pop();
 
         chrome.windows.create({ tabId }, (window) => {
             chrome.tabs.move(newTabs, { windowId: window.id, index: -1 });
         });
+
+        cleanPapi([tabId, ...newTabs]);
     }
 
     function moveTabsLeft() {
-        chrome.tabs.move(state.ids, {
+        chrome.tabs.move(selected.ids, {
             index: 0,
         });
     }
 
     function moveTabsRight() {
-        chrome.tabs.move(state.ids, {
+        chrome.tabs.move(selected.ids, {
             index: -1,
         });
     }
 
     function updateState(gid) {
-        let name;
-        let target;
-
-        for (const [key, value] of Object.entries(tabState[wid].info)) {
+        for (const [key, value] of Object.entries(tabState.byHost)) {
             if (value.gid === gid) {
-                name = key;
-                target = value;
+                selected.gid = gid;
+                selected.ids = value.ids;
+                selected.name = key;
                 break;
             }
         }
-
-        state.gid = gid;
-        state.ids = target.ids;
-        state.selected = name;
-        // chrome.tabs.highlight({ tabs: state.ids });
-        console.log(state);
     }
 
     function deleteTabsAll() {
-        deleteTabs(state.ids);
+        deleteTabs(selected.ids);
     }
 
     async function deleteTabs(ids) {
-        await chrome.tabs.remove(ids);
+        const [currentTab] = await chrome.tabs.query({
+            active: true,
+            currentWindow: true,
+        });
+        const filtered = ids.filter((id) => id !== currentTab.id);
 
-        cleanPapi();
+        const result = await chrome.tabs.remove(filtered);
+        if (result) {
+            cleanPapi(ids);
+        }
     }
 
     function reduceTabs() {
-        const tmp = state.ids.slice(0, state.ids.length - 1);
+        const tmp = selected.ids.slice(0, selected.ids.length - 1);
         deleteTabs(tmp);
     }
 

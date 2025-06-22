@@ -1,20 +1,10 @@
 import createCommands from "./scripts/keybinds.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const tabs = await chrome.tabs.query({});
-
-    if (tabs) {
-        chrome.storage.local.set({ initialTabs: tabs.data }, () => {
-            console.log("v2 Initial tab data set in local storage");
-        });
-    }
-});
-
 const initPapi = () => {
     document.addEventListener("DOMContentLoaded", async () => {
         let formatted = null;
         // fetch and process tab data
-        const tabs = await getTabs({});
+        const tabs = await getTabs();
 
         if (tabs) {
             formatted = formatTabData(tabs);
@@ -34,9 +24,7 @@ export async function renderItems(wid) {
 
     if (data) {
         const sites = document.getElementById("sites");
-        const group = data.formatted[wid];
-
-        const items = Object.entries(group.info).sort(
+        const items = Object.entries(data.formatted.byHost).sort(
             (a, b) => b[1].ids.length - a[1].ids.length,
         );
 
@@ -61,49 +49,37 @@ export async function saveToLocalStorage(data) {
 }
 
 export function formatTabData(data) {
-    const newData = data.reduce((acc, curr) => {
-        const wid = curr.windowId;
+    const tabState = {
+        windowId: null,
+        tabSrc: [...data],
+        byHost: {},
+    };
 
-        if (!acc.hasOwnProperty(wid)) {
-            acc[wid] = {
-                wid,
-                tabs: [],
+    for (let i = 0; i < tabState.tabSrc.length; ++i) {
+        const curr = tabState.tabSrc[i];
+        console.log(curr);
+        const hostname = new URL(curr.url).hostname;
+        console.log(`hostname: ${hostname}`);
+
+        if (!tabState.byHost.hasOwnProperty(hostname)) {
+            tabState.windowId = curr.windowId;
+            tabState.byHost[hostname] = {
+                gid: `g${i}`,
+                ids: [],
             };
         }
 
-        acc[wid].tabs.push(curr);
-        return acc;
-    }, {});
-
-    for (const obj of Object.values(newData)) {
-        const tabs = [...obj.tabs];
-        let group = 0;
-
-        const info = tabs.reduce((acc, curr) => {
-            const hostname = new URL(curr.url).hostname;
-
-            if (!acc.hasOwnProperty(hostname)) {
-                acc[hostname] = {
-                    gid: `g${group}`,
-                    ids: [],
-                };
-            }
-            acc[hostname].ids.push(curr.id);
-            group++;
-            return acc;
-        }, {});
-
-        // info.sort((a, b) => b.ids.length - a.ids.length);
-
-        obj.info = info;
+        tabState.byHost[hostname].ids.push(curr.id);
     }
 
     // create another property for display
-    return newData;
+    return tabState;
 }
 
-export async function getTabs(params) {
-    const response = await chrome.tabs.query(params);
+export async function getTabs() {
+    const currentWin = await chrome.windows.getCurrent();
+
+    const response = await chrome.tabs.query({ windowId: currentWin.id });
 
     if (!response) {
         throw new Error(`Failed to get tabs with params ${params}`);
