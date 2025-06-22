@@ -4,65 +4,31 @@ Your girlfriend's favorite tab manager.
 
 ## General
 
-Tab Papi will help you manage your excessive tab abuse. If you are a keyboard
-focused computer user, you might like this. It's more about needing to close
-a bunch of tabs, rather than carefully grooming them.
+You know you have a problem. 30+ tabs in one window? Multiple windows?!
 
-I made this for fun. I hope you find this useful!
+You can easily just close those them - but you don't. You think there's something important on one of those tabs. You definitely can't remember what that is, but you're stubborn.
+
+I made this so I can reduce my tab clutter quickly from my keyboard.
+
+You'll feel semi-accomplished. It's like... doing your laundry but being to lazy to fold it and put it away.
 
 ## Permissions / Disclaimer
 
-You will need to grant Papi permission. It relies on the tab's URL in order for
-it to organize all the tab data for display. That data is fetched when you first open the
-extension, and it's saved in your local storage. It will update its local
-storage any time you make changes to the window's tabs.
+You will need to grant Papi permission. It uses the tab URLs in order to sort the data, and then manages that list from local storage.
 
-The initial fetch will return info on all tabs for all open Google Chrome
-windows, which includes pages installed as apps. This is just a minor detail.
-Opening the Tab Papi extension will only display the tab in formation for that
-specific window.
+It fetches the tab data for the current window everytime you open Tab Papi.
 
-## Keybinds / TLDR;
+## Keybinds
 
-Note: I use Linux so these bindings are based on `Ctrl`.
+Note: For the full experience, go into the settings for Tab Papi and set a keybind to open it. I like `Ctrl+P`, but that might be `Print` for some of you.
 
+**The keybinds only work with Tab Papi open, and will only work on your current window.**
 TBA
 
 ## Detailed Usage
 
-Install Tab Papi, enable it & grant it permission, and pin it.
+* Moving up & down highlights the row - this is the 'selected' group of tabs
+* The actions only apply to the selected tabs
+* Hitting `Tab` will toggle btwn the Current / Info tabs
 
-`Ctrl + P` (for Papi) will open the Tab Papi popup.
-
-The tabs for the current window will be grouped by hostname, and sorted by total number of tabs in that group, descending order.
-
-`Tab` will allow you to cycle btwn the tabbed content. At the moment
-this is just between the main & info sections.
-
-You can move up and down your tab list with arrows or j & k. Actions will only
-affect the selected row. Navigation and actions only work when you are on the
-main tab.
-
-<!-- 1-4 will reduce the number of tabs in the selected row to that number of tabs. -->
-
-<!-- This happens in the order they appear from left to right in your current -->
-
-<!-- browser. -->
-
-<!---->
-
-<!-- Grouping them will move them adjacent to each other, and sort them from new to old (left to right) at the front of your window's tabs. This is so you -->
-
-<!-- ## Automated Settings -->
-
-<!---->
-
-<!-- - auto close -->
-
-<!--   - when memory is released -->
-
-<!--   - when inactive for X time -->
-
-<!--   - offer to close all matching tabs in other windows when current === 0 -->
-
-<!-- - generate top 5 on click -->}
+Will be adding additional features. Enjoy.
