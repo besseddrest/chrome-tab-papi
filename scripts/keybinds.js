@@ -1,4 +1,5 @@
 export default function createCommands(tabState, wid) {
+    console.log(tabState);
     let tabIdx = 0;
     let rowIdx = -1;
     const tabHeaders = document.querySelectorAll(".tabs li");
@@ -6,9 +7,9 @@ export default function createCommands(tabState, wid) {
     const tableRows = document.querySelectorAll(".group__record");
 
     const state = {
-        selected: null,
+        gid: null,
+        selected: "",
         ids: [],
-        name: "",
     };
 
     document.addEventListener("keydown", (e) => {
@@ -23,6 +24,7 @@ export default function createCommands(tabState, wid) {
             l: () => moveTabsRight(),
             d: () => deleteTabsAll(),
             r: () => reduceTabs(),
+            s: () => splitTabs(),
             Tab: () => cycleTabs(),
         };
 
@@ -33,6 +35,15 @@ export default function createCommands(tabState, wid) {
         // TODO
         // maybe we only need to keep the tab data in local storage up to date
         // vs query() and setting local storage
+    }
+
+    function splitTabs() {
+        const newTabs = [...state.ids];
+        const tabId = newTabs.pop();
+
+        chrome.windows.create({ tabId }, (window) => {
+            chrome.tabs.move(newTabs, { windowId: window.id, index: -1 });
+        });
     }
 
     function moveTabsLeft() {
@@ -48,18 +59,21 @@ export default function createCommands(tabState, wid) {
     }
 
     function updateState(gid) {
+        let name;
         let target;
 
-        for (const record of Object.values(tabState[wid].info)) {
-            if (record.gid === gid) {
-                target = record;
+        for (const [key, value] of Object.entries(tabState[wid].info)) {
+            if (value.gid === gid) {
+                name = key;
+                target = value;
                 break;
             }
         }
 
-        state.gid = target.gid;
+        state.gid = gid;
         state.ids = target.ids;
-        state.name = target.name;
+        state.selected = name;
+        // chrome.tabs.highlight({ tabs: state.ids });
         console.log(state);
     }
 
