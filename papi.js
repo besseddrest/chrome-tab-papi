@@ -57,9 +57,7 @@ export function formatTabData(data) {
 
     for (let i = 0; i < tabState.tabSrc.length; ++i) {
         const curr = tabState.tabSrc[i];
-        console.log(curr);
         const hostname = new URL(curr.url).hostname;
-        console.log(`hostname: ${hostname}`);
 
         if (!tabState.byHost.hasOwnProperty(hostname)) {
             tabState.windowId = curr.windowId;

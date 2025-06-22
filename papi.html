@@ -9,7 +9,7 @@
         <script src="./papi.js" type="module" defer></script>
     </head>
     <body>
-        <h1>Tab Papi</h1>
+        <h1>Tab Papi <small class="hide">&iexcl;aye dios mio!</small></h1>
         <p>Your girlfriend's favorite tab manager.</p>
 
         <ul class="tabs">
@@ -28,6 +28,13 @@
                 </table>
             </div>
             <div id="tab--info" class="tab__content">
+                <ul>
+                    <li>
+                        Actions only applied to tabs in selected row for the
+                        current window
+                    </li>
+                    <li>The active tab will not be closed</li>
+                </ul>
                 <table>
                     <thead>
                         <th>Bind</th>
@@ -40,11 +47,11 @@
                         </tr>
                         <tr>
                             <td>Up, Down, j, k</td>
-                            <td>Cycle through tab summary</td>
+                            <td>Navigate/select tab group</td>
                         </tr>
                         <tr>
                             <td>Left, Right, h, j</td>
-                            <td>Shift tabs to start/end</td>
+                            <td>Shift all tabs to front/back</td>
                         </tr>
                         <tr>
                             <td>d</td>
@@ -53,6 +60,10 @@
                         <tr>
                             <td>r</td>
                             <td>Reduce to 1 tab</td>
+                        </tr>
+                        <tr>
+                            <td>1-4</td>
+                            <td>Reduce by # tab(s)</td>
                         </tr>
                         <tr>
                             <td>o</td>

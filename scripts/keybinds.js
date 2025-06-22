@@ -5,33 +5,34 @@ export default function createCommands(tabState, wid) {
     const tabHeaders = document.querySelectorAll(".tabs li");
     const tabContent = document.querySelectorAll(".tab__content");
     const tableRows = document.querySelectorAll(".group__record");
-
+    const msg = document.querySelector("h1 small");
     const selected = {
         gid: null,
         name: "",
         ids: [],
     };
 
-    document.addEventListener("keydown", (e) => {
-        const keybinds = {
-            ArrowUp: () => navigateUp(),
-            ArrowDown: () => navigateDown(),
-            ArrowLeft: () => moveTabsLeft(),
-            ArrowRight: () => moveTabsRight(),
-            h: () => moveTabsLeft(),
-            k: () => navigateUp(),
-            j: () => navigateDown(),
-            l: () => moveTabsRight(),
-            d: () => deleteTabsAll(),
-            r: () => reduceTabs(),
-            o: () => splitTabs(),
-            1: () => reduceTabsBy(1),
-            2: () => reduceTabsBy(2),
-            3: () => reduceTabsBy(3),
-            4: () => reduceTabsBy(4),
-            Tab: () => cycleTabs(),
-        };
+    const keybinds = {
+        ArrowUp: () => navigateUp(),
+        ArrowDown: () => navigateDown(),
+        ArrowLeft: () => moveTabsLeft(),
+        ArrowRight: () => moveTabsRight(),
+        h: () => moveTabsLeft(),
+        k: () => navigateUp(),
+        j: () => navigateDown(),
+        l: () => moveTabsRight(),
+        d: () => deleteTabsAll(),
+        r: () => reduceTabs(),
+        o: () => splitTabs(),
+        1: () => reduceTabsBy(1),
+        2: () => reduceTabsBy(2),
+        3: () => reduceTabsBy(3),
+        4: () => reduceTabsBy(4),
+        Tab: () => cycleTabs(),
+    };
 
+    document.addEventListener("keydown", (e) => {
+        if (!keybinds.hasOwnProperty(e.key)) return;
         keybinds[e.key]();
     });
 
@@ -93,6 +94,11 @@ export default function createCommands(tabState, wid) {
     }
 
     async function deleteTabs(ids) {
+        msg.classList.remove("hide");
+        setTimeout(() => {
+            msg.classList.add("hide");
+        }, 100);
+
         const [currentTab] = await chrome.tabs.query({
             active: true,
             currentWindow: true,
