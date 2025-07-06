@@ -1,4 +1,4 @@
-# Tab Papi
+# Tab Papi (Google Chrome)
 
 Your girlfriend's favorite tab manager.
 

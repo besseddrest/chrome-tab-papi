@@ -43,8 +43,11 @@ export default function createCommands(tabState) {
         keybinds[e.key]();
     });
 
-    window.addEventListener("blur", () => {
-        window.close();
+    // TODO: fix bubbling
+    window.addEventListener("blur", (e) => {
+        if (e.target === window) {
+            window.close();
+        }
     });
 
     // ░█▀▀░█▀▀░█▀█░█▀▀░█▀▄░█▀█░█░░

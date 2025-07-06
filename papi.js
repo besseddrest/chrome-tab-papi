@@ -1,7 +1,8 @@
 import createCommands from "./scripts/keybinds.js";
 
 /**
- *
+ * I think these are all run only once, when you open Tab Papi
+ * The DOM and localstorage is updated actively until you close Papi
  */
 const initPapi = () => {
     document.addEventListener("DOMContentLoaded", async () => {
@@ -22,7 +23,6 @@ const initPapi = () => {
     });
 };
 
-// initial render only
 async function renderItems(wid) {
     const data = await chrome.storage.local.get(["formatted"]);
 
@@ -36,8 +36,7 @@ async function renderItems(wid) {
             const tmpl = document.getElementById("tmpl_counts");
             const newItem = tmpl.content.cloneNode(true);
             newItem.querySelector(".group__record").id = item[1].gid;
-            newItem.querySelector(".group__host").textContent =
-                `${item[0]} (${item[1].gid})`;
+            newItem.querySelector(".group__host").textContent = `${item[0]}`;
             newItem.querySelector(".group__count").textContent =
                 `${item[1].ids.length}`;
 
