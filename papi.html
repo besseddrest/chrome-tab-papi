@@ -10,10 +10,18 @@
     </head>
     <body>
         <h1>Tab Papi <small class="hide">&iexcl;aye dios mio!</small></h1>
-        <p>Your girlfriend's favorite tab manager.</p>
+        <p>Hint: Use your keyboard.</p>
+        <p>
+            <i
+                ><small>
+                    (I realize this is an accessibility issue, so I'll add mouse
+                    support to TODOs)
+                </small></i
+            >
+        </p>
 
         <ul class="tabs">
-            <li id="main" class="active">Current</li>
+            <li id="main" class="active">List</li>
             <li id="info">Info</li>
         </ul>
         <div class="tab__wrap">
@@ -25,6 +33,7 @@
                             <th style="text-align: center">Count</th>
                         </tr>
                     </thead>
+                    <tbody></tbody>
                 </table>
             </div>
             <div id="tab--info" class="tab__content">
@@ -43,7 +52,7 @@
                     <tbody>
                         <tr>
                             <td>Tab</td>
-                            <td>Cycle btwn tab content</td>
+                            <td>Toggles btwn List/Info</td>
                         </tr>
                         <tr>
                             <td>Up, Down, j, k</td>
@@ -59,11 +68,11 @@
                         </tr>
                         <tr>
                             <td>r</td>
-                            <td>Reduce to 1 tab</td>
+                            <td>Reduce TO 1 tab (most recent)</td>
                         </tr>
                         <tr>
                             <td>1-4</td>
-                            <td>Reduce by # tab(s)</td>
+                            <td>Reduce BY # (oldest first)</td>
                         </tr>
                         <tr>
                             <td>o</td>

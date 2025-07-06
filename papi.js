@@ -1,5 +1,8 @@
 import createCommands from "./scripts/keybinds.js";
 
+/**
+ *
+ */
 const initPapi = () => {
     document.addEventListener("DOMContentLoaded", async () => {
         let formatted = null;
@@ -19,11 +22,12 @@ const initPapi = () => {
     });
 };
 
-export async function renderItems(wid) {
+// initial render only
+async function renderItems(wid) {
     const data = await chrome.storage.local.get(["formatted"]);
 
     if (data) {
-        const sites = document.getElementById("sites");
+        const sites = document.querySelector("#sites tbody");
         const items = Object.entries(data.formatted.byHost).sort(
             (a, b) => b[1].ids.length - a[1].ids.length,
         );
@@ -44,11 +48,11 @@ export async function renderItems(wid) {
     return data;
 }
 
-export async function saveToLocalStorage(data) {
+async function saveToLocalStorage(data) {
     await chrome.storage.local.set({ formatted: data });
 }
 
-export function formatTabData(data) {
+function formatTabData(data) {
     const tabState = {
         windowId: null,
         tabSrc: [...data],
@@ -74,7 +78,7 @@ export function formatTabData(data) {
     return tabState;
 }
 
-export async function getTabs() {
+async function getTabs() {
     const currentWin = await chrome.windows.getCurrent();
 
     const response = await chrome.tabs.query({ windowId: currentWin.id });

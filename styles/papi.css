@@ -91,7 +91,7 @@ table th {
 table tr {
     transform: scale(1);
 }
-table tr.selected {
+table .group__record.selected {
     background-color: goldenrod !important;
     transform: scale(1.06);
     transition: transform 0.15s ease-in-out;

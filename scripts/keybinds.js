@@ -1,16 +1,19 @@
-import { renderItems } from "../papi.js";
-export default function createCommands(tabState, wid) {
+export default function createCommands(tabState) {
     let tabIdx = 0;
     let rowIdx = -1;
     const tabHeaders = document.querySelectorAll(".tabs li");
     const tabContent = document.querySelectorAll(".tab__content");
-    const tableRows = document.querySelectorAll(".group__record");
+    let tableRows = document.querySelectorAll(".group__record");
     const msg = document.querySelector("h1 small");
     const selected = {
         gid: null,
         name: "",
         ids: [],
     };
+
+    // ░█▀▄░▀█▀░█▀█░█▀▄░█▀▀
+    // ░█▀▄░░█░░█░█░█░█░▀▀█
+    // ░▀▀░░▀▀▀░▀░▀░▀▀░░▀▀▀
 
     const keybinds = {
         ArrowUp: () => navigateUp(),
@@ -21,34 +24,72 @@ export default function createCommands(tabState, wid) {
         k: () => navigateUp(),
         j: () => navigateDown(),
         l: () => moveTabsRight(),
-        d: () => deleteTabsAll(),
-        r: () => reduceTabs(),
-        o: () => splitTabs(),
-        1: () => reduceTabsBy(1),
+        d: () => deleteTabsAll(), // delete all tabs
+        r: () => reduceTabs(), // reduce TO 1
+        o: () => splitTabs(), // open all tabs in new window
+        1: () => reduceTabsBy(1), // reduce tabs BY #
         2: () => reduceTabsBy(2),
         3: () => reduceTabsBy(3),
         4: () => reduceTabsBy(4),
-        Tab: () => cycleTabs(),
+        Tab: () => cycleContent(), // toggles btwn List / Info
     };
+
+    // ░█▀▀░█░█░█▀▀░█▀█░▀█▀░█▀▀
+    // ░█▀▀░▀▄▀░█▀▀░█░█░░█░░▀▀█
+    // ░▀▀▀░░▀░░▀▀▀░▀░▀░░▀░░▀▀▀
 
     document.addEventListener("keydown", (e) => {
         if (!keybinds.hasOwnProperty(e.key)) return;
         keybinds[e.key]();
     });
 
-    async function cleanPapi(ids) {
+    window.addEventListener("blur", () => {
+        window.close();
+    });
+
+    // ░█▀▀░█▀▀░█▀█░█▀▀░█▀▄░█▀█░█░░
+    // ░█░█░█▀▀░█░█░█▀▀░█▀▄░█▀█░█░░
+    // ░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀
+
+    // change the DOM directly rather than fetching tab data
+    function updateDOM(ids) {
+        // remaining tabs for selected
         const diff = [...selected.ids].filter((item) => !ids.includes(item));
+        const targetRow = document.getElementById(`${selected.gid}`);
+        const idx = Array.prototype.indexOf.call(tableRows, targetRow);
 
-        // TODO: too many states
-        tabState.byHost[selected.hostname].ids = diff;
-        selected.ids = diff;
+        // TODO: update tabState w/ diff
+        if (diff.length === 0) {
+            targetRow.remove();
+            delete tabState[selected.name];
+        } else {
+            targetRow.querySelector(".group__count").textContent =
+                `${diff.length}`;
+            tabState[selected.name].ids = diff;
+        }
 
-        await chrome.storage.local
-            .set({ formatted: tabState })
-            .then(async () => {
-                await renderItems(tabState.windowId);
-            });
+        // refresh reference
+        tableRows = document.querySelectorAll(".group__record");
+        tableRows[idx].classList.add("selected");
+        rowIdx = idx;
     }
+
+    // just keeps track of the highlighted tab
+    // TODO: this needs to update based on the DOM, not localstorage
+    function updateState(gid) {
+        for (const [key, value] of Object.entries(tabState.byHost)) {
+            if (value.gid === gid) {
+                selected.gid = gid;
+                selected.ids = value.ids;
+                selected.name = key;
+                break;
+            }
+        }
+    }
+
+    // ░█▀█░█▀▀░▀█▀░▀█▀░█▀█░█▀█░█▀▀
+    // ░█▀█░█░░░░█░░░█░░█░█░█░█░▀▀█
+    // ░▀░▀░▀▀▀░░▀░░▀▀▀░▀▀▀░▀░▀░▀▀▀
 
     function reduceTabsBy(num) {
         const ids = selected.ids.splice(0, num);
@@ -59,11 +100,12 @@ export default function createCommands(tabState, wid) {
         const newTabs = [...selected.ids];
         const tabId = newTabs.pop();
 
-        chrome.windows.create({ tabId }, (window) => {
+        chrome.windows.create({ tabId, focused: false }, (window) => {
             chrome.tabs.move(newTabs, { windowId: window.id, index: -1 });
+            chrome.windows.update(tabState.windowId);
         });
 
-        cleanPapi([tabId, ...newTabs]);
+        window.close();
     }
 
     function moveTabsLeft() {
@@ -78,23 +120,13 @@ export default function createCommands(tabState, wid) {
         });
     }
 
-    function updateState(gid) {
-        for (const [key, value] of Object.entries(tabState.byHost)) {
-            if (value.gid === gid) {
-                selected.gid = gid;
-                selected.ids = value.ids;
-                selected.name = key;
-                break;
-            }
-        }
-    }
-
     function deleteTabsAll() {
         deleteTabs(selected.ids);
     }
 
     async function deleteTabs(ids) {
         msg.classList.remove("hide");
+
         setTimeout(() => {
             msg.classList.add("hide");
         }, 100);
@@ -105,10 +137,8 @@ export default function createCommands(tabState, wid) {
         });
         const filtered = ids.filter((id) => id !== currentTab.id);
 
-        const result = await chrome.tabs.remove(filtered);
-        if (result) {
-            cleanPapi(ids);
-        }
+        await chrome.tabs.remove(filtered);
+        updateDOM(filtered);
     }
 
     function reduceTabs() {
@@ -116,7 +146,11 @@ export default function createCommands(tabState, wid) {
         deleteTabs(tmp);
     }
 
-    function cycleTabs() {
+    // ░█▄█░█▀█░█░█░█▀▀░█▄█░█▀▀░█▀█░▀█▀
+    // ░█░█░█░█░▀▄▀░█▀▀░█░█░█▀▀░█░█░░█░
+    // ░▀░▀░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░
+
+    function cycleContent() {
         tabIdx = tabIdx === 0 ? 1 : 0;
 
         if (tabIdx === 1) {
