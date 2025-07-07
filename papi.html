@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="theme-gruvbox-dark">
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -11,16 +11,11 @@
     <body>
         <h1>Tab Papi <small class="hide">&iexcl;aye dios mio!</small></h1>
         <p>Hint: Use your keyboard.</p>
-        <p>
-            <i>
-                (I realize this is an accessibility issue, so I'll add mouse
-                support to TODOs)
-            </i>
-        </p>
 
         <ul class="tabs">
             <li id="main" class="active">List</li>
             <li id="info">Info</li>
+            <li id="settings">Settings</li>
         </ul>
         <div class="tab__wrap">
             <div id="tab--main" class="tab__content tab__content--active">
@@ -28,7 +23,7 @@
                     <thead>
                         <tr>
                             <th>Hostname</th>
-                            <th style="text-align: center">Count</th>
+                            <th style="text-align: center"># Tabs</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -78,6 +73,17 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div id="tab--settings" class="tab__content">
+                Colorscheme:
+                <select id="scheme-picker">
+                    <option value="rose-pine-moon">Rose Pine Moon</option>
+                    <option value="catpuccin-mocha">Catpuccin Mocha</option>
+                    <option value="tokyo-night">Tokyo Night</option>
+                    <option value="nord">Nord</option>
+                    <option value="gruvbox-dark">Gruvbox Dark</option>
+                    <option value="dracula">dracula</option>
+                </select>
             </div>
         </div>
 

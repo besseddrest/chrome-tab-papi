@@ -1,0 +1,122 @@
+@use "themes";
+
+html,
+body {
+    border: none;
+    background: transparent;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    width: 360px;
+    max-width: 360px;
+    min-height: 360px;
+    height: auto;
+    padding: 0 5px;
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: var(--color-primary);
+    position: relative;
+
+    small {
+        font-size: 14px;
+        position: absolute;
+        right: 0;
+    }
+    .hide {
+        display: none;
+    }
+}
+
+.group {
+    &__record {
+        &.selected {
+            background-color: var(--color-accent);
+            color: var(--color-text-tertiary);
+        }
+    }
+    &__count {
+        text-align: center;
+    }
+
+    &__host {
+        white-space: no-wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.main {
+    display: flex;
+}
+
+.legend {
+    padding: 2px 5px;
+    flex: 1 1 auto;
+}
+
+.tabs {
+    display: flex;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    justify-content: flex-start;
+
+    li {
+        font-weight: bold;
+        font-size: 16px;
+        border: 1px solid var(--color-border);
+        margin-left: 0;
+        padding: 0 10px;
+        border-bottom: 0;
+        color: var(--color-text-secondary);
+        background-color: var(--color-surface);
+
+        &.active {
+            background-color: var(--color-background);
+            color: var(--color-secondary);
+        }
+    }
+}
+
+table {
+    font-size: 15px;
+    background-color: var(--color-surface);
+    width: 100%;
+    thead {
+        tr {
+            background-color: var(--color-background);
+        }
+    }
+    th {
+        padding: 5px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    tr {
+        &:nth-child(even) {
+            background-color: var(--color-overlay);
+        }
+    }
+    td {
+        padding: 3px 5px;
+    }
+}
+
+.tab__content {
+    display: none;
+
+    &--active {
+        display: block;
+    }
+}

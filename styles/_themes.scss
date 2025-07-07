@@ -1,0 +1,147 @@
+@use "sass:map";
+$color-schemes: (
+    rose-pine-moon: (
+        primary: #c4a7e7,
+        secondary: #9ccfd8,
+        accent: #f6c177,
+        background: #232136,
+        surface: #2a273f,
+        overlay: #393552,
+        text: #e0def4,
+        text-secondary: #908caa,
+        text-tertiary: #232136,
+        border: #44415a,
+        success: #9ccfd8,
+        warning: #f6c177,
+        error: #eb6f92,
+        // pine: #3e8fb0,
+         // rose: #ea9a97,
+    ),
+    catpuccin-mocha: (
+        primary: #cba6f7,
+        secondary: #89b4fa,
+        accent: #f9e2af,
+        background: #1e1e2e,
+        surface: #313244,
+        overlay: #45475a,
+        text: #cdd6f4,
+        text-secondary: #bac2de,
+        text-tertiary: #1e1e2e,
+        border: #585b70,
+        success: #a6e3a1,
+        warning: #f9e2af,
+        error: #f38ba8,
+        // lavender: #b4befe,
+        // peach: #fab387,
+         // teal: #94e2d5,
+    ),
+    tokyo-night: (
+        primary: #7aa2f7,
+        secondary: #bb9af7,
+        accent: #e0af68,
+        background: #1a1b26,
+        surface: #24283b,
+        overlay: #414868,
+        text: #c0caf5,
+        text-secondary: #9aa5ce,
+        text-tertiary: #1a1b26,
+        border: #3b4261,
+        success: #9ece6a,
+        warning: #e0af68,
+        error: #f7768e,
+        // cyan: #7dcfff,
+        // magenta: #bb9af7,
+         // orange: #ff9e64,
+    ),
+    nord: (
+        primary: #5e81ac,
+        secondary: #81a1c1,
+        accent: #88c0d0,
+        background: #2e3440,
+        surface: #3b4252,
+        overlay: #434c5e,
+        text: #eceff4,
+        text-secondary: #d8dee9,
+        text-tertiary: #2e3440,
+        border: #4c566a,
+        success: #a3be8c,
+        warning: #ebcb8b,
+        error: #bf616a,
+        // purple: #b48ead,
+        // orange: #d08770,
+         // frost: #8fbcbb
+    ),
+    gruvbox-dark: (
+        primary: #458588,
+        secondary: #689d6a,
+        accent: #d79921,
+        background: #282828,
+        surface: #32302f,
+        overlay: #3c3836,
+        text: #ebdbb2,
+        text-secondary: #d5c4a1,
+        text-tertiary: #282828,
+        border: #504945,
+        success: #98971a,
+        warning: #d79921,
+        error: #cc241d,
+        // purple: #b16286,
+        // orange: #d65d0e,
+         // gray: #928374
+    ),
+
+    dracula: (
+        primary: #bd93f9,
+        secondary: #8be9fd,
+        accent: #50fa7b,
+        background: #282a36,
+        surface: #44475a,
+        overlay: #6272a4,
+        text: #f8f8f2,
+        text-secondary: #6272a4,
+        text-tertiary: #282a36,
+        border: #44475a,
+        success: #50fa7b,
+        warning: #f1fa8c,
+        error: #ff5555,
+        // pink: #ff79c6,
+        // orange: #ffb86c,
+         // selection: #44475a
+    ),
+);
+
+@mixin color-scheme($name) {
+    $scheme: map.get($color-schemes, $name);
+
+    @if $scheme == null {
+        @error "Color scheme '#{$name}' not found";
+    }
+
+    @each $color-name, $color-value in $scheme {
+        --color-#{$color-name}: #{$color-value};
+    }
+}
+
+.theme-rose-pine-moon {
+    @include color-scheme(rose-pine-moon);
+}
+
+.theme-catpuccin-mocha {
+    @include color-scheme(catpuccin-mocha);
+}
+
+.theme-tokyo-night {
+    @include color-scheme(tokyo-night);
+}
+
+.theme-nord {
+    @include color-scheme(nord);
+}
+
+.theme-gruvbox-dark {
+    @include color-scheme(gruvbox-dark);
+}
+
+.theme-dracula {
+    @include color-scheme(dracula);
+}

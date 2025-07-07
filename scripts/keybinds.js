@@ -3,7 +3,7 @@ export default function createCommands(tabState) {
     let rowIdx = -1;
     const tabHeaders = document.querySelectorAll(".tabs li");
     const tabContent = document.querySelectorAll(".tab__content");
-    let tableRows = document.querySelectorAll(".group__record");
+    let tableRows = Array.from(document.querySelectorAll(".group__record"));
     const msg = document.querySelector("h1 small");
     const selected = {
         gid: null,
@@ -32,22 +32,20 @@ export default function createCommands(tabState) {
         3: () => reduceTabsBy(3),
         4: () => reduceTabsBy(4),
         Tab: () => cycleContent(), // toggles btwn List / Info
+        Escape: () => window.close(),
     };
 
     // ░█▀▀░█░█░█▀▀░█▀█░▀█▀░█▀▀
     // ░█▀▀░▀▄▀░█▀▀░█░█░░█░░▀▀█
     // ░▀▀▀░░▀░░▀▀▀░▀░▀░░▀░░▀▀▀
 
-    document.addEventListener("keydown", (e) => {
-        if (!keybinds.hasOwnProperty(e.key)) return;
-        keybinds[e.key]();
+    document.addEventListener("keydown", (ev) => {
+        if (!keybinds.hasOwnProperty(ev.key)) return;
+        keybinds[ev.key]();
     });
 
-    // TODO: fix bubbling
-    window.addEventListener("blur", (e) => {
-        if (e.target === window) {
-            window.close();
-        }
+    window.addEventListener("blur", (ev) => {
+        ev.stopPropagation();
     });
 
     // ░█▀▀░█▀▀░█▀█░█▀▀░█▀▄░█▀█░█░░
@@ -59,22 +57,39 @@ export default function createCommands(tabState) {
         // remaining tabs for selected
         const diff = [...selected.ids].filter((item) => !ids.includes(item));
         const targetRow = document.getElementById(`${selected.gid}`);
-        const idx = Array.prototype.indexOf.call(tableRows, targetRow);
 
-        // TODO: update tabState w/ diff
         if (diff.length === 0) {
             targetRow.remove();
-            delete tabState[selected.name];
+            delete tabState.byHost[selected.name];
+            rowIdx -= 1;
+            // refresh reference
+            tableRows = Array.from(document.querySelectorAll(".group__record"));
         } else {
             targetRow.querySelector(".group__count").textContent =
                 `${diff.length}`;
-            tabState[selected.name].ids = diff;
+            const children = targetRow.parentElement.children;
+            tabState.byHost[selected.name].ids = diff;
         }
 
-        // refresh reference
-        tableRows = document.querySelectorAll(".group__record");
-        tableRows[idx].classList.add("selected");
-        rowIdx = idx;
+        // TODO: sort the list since we've closed some tabs to preserve descending order before replacing in dom
+
+        tableRows.sort((a, b) => {
+            return (
+                parseInt(b.querySelector(".group__count").textContent) -
+                parseInt(a.querySelector(".group__count").textContent)
+            );
+        });
+        for (const row of tableRows) {
+            if (row.classList.contains("selected")) {
+                row.classList.remove("selected");
+            }
+            if (row.id === selected.gid) {
+                row.classList.add("selected");
+            }
+        }
+
+        rowIdx = tableRows.indexOf(targetRow);
+        document.querySelector("#sites tbody").replaceChildren(...tableRows);
     }
 
     // just keeps track of the highlighted tab
