@@ -20,8 +20,47 @@ const initPapi = () => {
                 createCommands(res.formatted, currentWin.id);
             });
         }
+
+        const userConfig = await chrome.storage.sync.get(["user"]);
+
+        if (!userConfig) {
+            const conf = {
+                theme: "default",
+                font: "default",
+            };
+
+            await chrome.storage.sync.set({ user: conf });
+        } else {
+            setColorScheme(userConfig.user.theme);
+        }
+
+        const scheme = document.getElementById("scheme-picker");
+
+        scheme.addEventListener("change", async (ev) => {
+            setColorScheme(ev.target.value);
+        });
     });
 };
+
+async function setColorScheme(name) {
+    const html = document.getElementsByTagName("html")[0];
+    html.className = "";
+    html.classList.add(`theme-${name}`);
+
+    const options = document.getElementById("scheme-picker").children;
+
+    for (const child of options) {
+        if (child.value === name) {
+            child.selected = "selected";
+        }
+    }
+
+    const user = {
+        theme: name,
+    };
+
+    await chrome.storage.sync.set({ user: user });
+}
 
 async function renderItems(wid) {
     const data = await chrome.storage.local.get(["formatted"]);
