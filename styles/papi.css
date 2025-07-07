@@ -1,3 +1,19 @@
+.theme-default {
+  --color-primary: #c4a7e7;
+  --color-secondary: #9ccfd8;
+  --color-accent: #f6c177;
+  --color-background: #232136;
+  --color-surface: #2a273f;
+  --color-overlay: #393552;
+  --color-text: #e0def4;
+  --color-text-secondary: #908caa;
+  --color-text-tertiary: #232136;
+  --color-border: #44415a;
+  --color-success: #9ccfd8;
+  --color-warning: #f6c177;
+  --color-error: #eb6f92;
+}
+
 .theme-rose-pine-moon {
   --color-primary: #c4a7e7;
   --color-secondary: #9ccfd8;

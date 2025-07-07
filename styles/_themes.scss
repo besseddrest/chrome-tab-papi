@@ -1,5 +1,22 @@
 @use "sass:map";
 $color-schemes: (
+    default: (
+        primary: #c4a7e7,
+        secondary: #9ccfd8,
+        accent: #f6c177,
+        background: #232136,
+        surface: #2a273f,
+        overlay: #393552,
+        text: #e0def4,
+        text-secondary: #908caa,
+        text-tertiary: #232136,
+        border: #44415a,
+        success: #9ccfd8,
+        warning: #f6c177,
+        error: #eb6f92,
+        // pine: #3e8fb0,
+         // rose: #ea9a97,
+    ),
     rose-pine-moon: (
         primary: #c4a7e7,
         secondary: #9ccfd8,
@@ -120,6 +137,10 @@ $color-schemes: (
     @each $color-name, $color-value in $scheme {
         --color-#{$color-name}: #{$color-value};
     }
+}
+
+.theme-default {
+    @include color-scheme(default);
 }
 
 .theme-rose-pine-moon {

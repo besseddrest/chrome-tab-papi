@@ -169,19 +169,13 @@ export default function createCommands(tabState) {
     // ░▀░▀░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░
 
     function cycleContent() {
-        tabIdx = tabIdx === 0 ? 1 : 0;
+        const prev = tabIdx;
+        tabIdx = tabIdx === 2 ? 0 : tabIdx + 1;
 
-        if (tabIdx === 1) {
-            tabHeaders[0].classList.remove("active");
-            tabContent[0].classList.remove("tab__content--active");
-            tabHeaders[1].classList.add("active");
-            tabContent[1].classList.add("tab__content--active");
-        } else {
-            tabHeaders[1].classList.remove("active");
-            tabContent[1].classList.remove("tab__content--active");
-            tabHeaders[0].classList.add("active");
-            tabContent[0].classList.add("tab__content--active");
-        }
+        tabHeaders[prev].classList.remove("active");
+        tabContent[prev].classList.remove("tab__content--active");
+        tabHeaders[tabIdx].classList.add("active");
+        tabContent[tabIdx].classList.add("tab__content--active");
     }
 
     function navigateDown() {
