@@ -171,7 +171,7 @@ h1 .hide {
 .tabs {
   display: flex;
   list-style: none;
-  margin-left: 0;
+  margin: 0;
   padding-left: 0;
   justify-content: flex-start;
 }
@@ -215,6 +215,48 @@ table td {
 }
 .tab__content--active {
   display: block;
+}
+
+/** Sandevistan **/
+.theme-sandevistan {
+  background-color: #020d20;
+  color: #f8e602;
+}
+.theme-sandevistan .tabs li {
+  border: 1px solid #282a36;
+  background-color: #00ff9f;
+  color: #020d20;
+}
+.theme-sandevistan .tabs li.active {
+  color: #00ff9f;
+  background-color: #020d20;
+}
+.theme-sandevistan .tab__content {
+  background: #00ff9f;
+  padding: 10px;
+}
+.theme-sandevistan table {
+  background-color: #d600ff;
+  border: 0;
+  outline: none;
+}
+.theme-sandevistan table thead tr th {
+  background-color: #00b8ff;
+  color: #001eff;
+}
+.theme-sandevistan table tr td {
+  border: 0;
+  outline: none;
+}
+.theme-sandevistan table tr:nth-child(odd) {
+  background-color: #bd00ff;
+}
+.theme-sandevistan table tr:nth-child(even) {
+  background-color: #d600ff;
+}
+.theme-sandevistan .group__record.selected {
+  background-color: #001eff;
+  color: #00b8ff;
 }
 
 /*# sourceMappingURL=papi.css.map */

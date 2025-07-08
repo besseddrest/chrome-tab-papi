@@ -106,7 +106,6 @@ $color-schemes: (
         // orange: #d65d0e,
          // gray: #928374
     ),
-
     dracula: (
         primary: #bd93f9,
         secondary: #8be9fd,
@@ -118,6 +117,26 @@ $color-schemes: (
         text-secondary: #6272a4,
         text-tertiary: #282a36,
         border: #44475a,
+        success: #50fa7b,
+        warning: #f1fa8c,
+        error: #ff5555,
+        // pink: #ff79c6,
+        // orange: #ffb86c,
+         // selection: #44475a
+    ),
+
+    sandevistan: (
+        primary: #001eff,
+        secondary: #00ff9f,
+        accent: #00b8ff,
+        background: #020d20,
+        // background2: #00b8ff,
+        surface: #d600ff,
+        overlay: #bd00ff,
+        text: #f8e602,
+        text-secondary: #6272a4,
+        text-tertiary: #282a36,
+        border: #f8e602,
         success: #50fa7b,
         warning: #f1fa8c,
         error: #ff5555,
@@ -166,3 +185,7 @@ $color-schemes: (
 .theme-dracula {
     @include color-scheme(dracula);
 }
+
+// .theme-sandevistan {
+//     @include color-scheme(sandevistan);
+// }

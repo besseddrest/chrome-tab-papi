@@ -10,7 +10,7 @@
     </head>
     <body>
         <h1>Tab Papi <small class="hide">&iexcl;aye dios mio!</small></h1>
-        <p>Hint: Use your keyboard.</p>
+        <!-- <p>Hint: Use your keyboard.</p> -->
 
         <ul class="tabs">
             <li id="main" class="active">List</li>
@@ -30,13 +30,6 @@
                 </table>
             </div>
             <div id="tab--info" class="tab__content">
-                <ul>
-                    <li>
-                        Actions only applied to tabs in selected row for the
-                        current window
-                    </li>
-                    <li>The active tab will not be closed</li>
-                </ul>
                 <table>
                     <thead>
                         <th>Bind</th>
@@ -48,11 +41,11 @@
                             <td>Toggles btwn List/Info</td>
                         </tr>
                         <tr>
-                            <td>Up, Down, j, k</td>
+                            <td>&uarr;, &darr;, j, k</td>
                             <td>Navigate/select tab group</td>
                         </tr>
                         <tr>
-                            <td>Left, Right, h, j</td>
+                            <td>&larr;, &rarr;, h, j</td>
                             <td>Shift all tabs to front/back</td>
                         </tr>
                         <tr>
@@ -75,16 +68,43 @@
                 </table>
             </div>
             <div id="tab--settings" class="tab__content">
-                <h3>Colorscheme:</h3>
-                <select id="scheme-picker">
-                    <option value="default" default>Default</option>
-                    <option value="rose-pine-moon">Rose Pine Moon</option>
-                    <option value="catpuccin-mocha">Catpuccin Mocha</option>
-                    <option value="tokyo-night">Tokyo Night</option>
-                    <option value="nord">Nord</option>
-                    <option value="gruvbox-dark">Gruvbox Dark</option>
-                    <option value="dracula">dracula</option>
-                </select>
+                <h3></h3>
+                <table>
+                    <thead>
+                        <th>Setting</th>
+                        <th>Value</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Colorscheme</td>
+                            <td>
+                                <select id="scheme-picker">
+                                    <option value="default" default>
+                                        Default
+                                    </option>
+                                    <option value="dark">Dark</option>
+                                    <option value="dracula">Dracula</option>
+                                    <option value="catpuccin-mocha">
+                                        Catpuccin Mocha
+                                    </option>
+                                    <option value="gruvbox-dark">
+                                        Gruvbox Dark
+                                    </option>
+                                    <option value="nord">Nord</option>
+                                    <option value="rose-pine-moon">
+                                        Rose Pine Moon
+                                    </option>
+                                    <option value="sandevistan">
+                                        Sandevistan
+                                    </option>
+                                    <option value="tokyo-night">
+                                        Tokyo Night
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
