@@ -10,7 +10,6 @@
     </head>
     <body>
         <h1>Tab Papi <small class="hide">&iexcl;aye dios mio!</small></h1>
-        <!-- <p>Hint: Use your keyboard.</p> -->
 
         <ul class="tabs">
             <li id="main" class="active">List</li>
@@ -19,100 +18,113 @@
         </ul>
         <div class="tab__wrap">
             <div id="tab--main" class="tab__content tab__content--active">
-                <table id="sites" class="group__table">
-                    <thead>
-                        <tr>
-                            <th>Hostname</th>
-                            <th style="text-align: center"># Tabs</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div id="sites" class="grid__table">
+                    <div class="grid__headers">
+                        <div class="grid__header">Hostname</div>
+                        <div class="grid__header"># Tabs</div>
+                    </div>
+                    <div class="grid__content"></div>
+                </div>
             </div>
             <div id="tab--info" class="tab__content">
-                <table>
-                    <thead>
-                        <th>Bind</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Tab</td>
-                            <td>Toggles btwn List/Info</td>
-                        </tr>
-                        <tr>
-                            <td>&uarr;, &darr;, j, k</td>
-                            <td>Navigate/select tab group</td>
-                        </tr>
-                        <tr>
-                            <td>&larr;, &rarr;, h, j</td>
-                            <td>Shift all tabs to front/back</td>
-                        </tr>
-                        <tr>
-                            <td>d</td>
-                            <td>Delete all tabs</td>
-                        </tr>
-                        <tr>
-                            <td>r</td>
-                            <td>Reduce TO 1 tab (most recent)</td>
-                        </tr>
-                        <tr>
-                            <td>1-4</td>
-                            <td>Reduce BY # (oldest first)</td>
-                        </tr>
-                        <tr>
-                            <td>o</td>
-                            <td>Open tabs in new window</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="grid__data">
+                    <div class="grid__headers">
+                        <div class="grid__header">Bind</div>
+                        <div class="grid__header">Action</div>
+                    </div>
+                    <div class="grid__content">
+                        <div class="grid__row">
+                            <div class="grid__cell">Tab</div>
+                            <div class="grid__cell">Toggles btwn List/Info</div>
+                        </div>
+                        <div class="grid__row">
+                            <div class="grid__cell">&uarr;, &darr;, j, k</div>
+                            <div class="grid__cell">
+                                Navigate/select tab group
+                            </div>
+                        </div>
+                        <div class="grid__row">
+                            <div class="grid__cell">&larr;, &rarr;, h, l</div>
+                            <div class="grid__cell">
+                                Shift all tabs to front/back
+                            </div>
+                        </div>
+                        <div class="grid__row">
+                            <div class="grid__cell">d</div>
+                            <div class="grid__cell">Delete all tabs</div>
+                        </div>
+                        <div class="grid__row">
+                            <div class="grid__cell">r</div>
+                            <div class="grid__cell">
+                                Reduce TO 1 tab (most recent)
+                            </div>
+                        </div>
+                        <div class="grid__row">
+                            <div class="grid__cell">1-4</div>
+                            <div class="grid__cell">
+                                Reduce BY # (oldest first)
+                            </div>
+                        </div>
+                        <div class="grid__row">
+                            <div class="grid__cell">o</div>
+                            <div class="grid__cell">
+                                Open tabs in new window
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="tab--settings" class="tab__content">
-                <h3></h3>
-                <table>
-                    <thead>
-                        <th>Setting</th>
-                        <th>Value</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Colorscheme</td>
-                            <td>
-                                <select id="scheme-picker">
-                                    <option value="default" default>
-                                        Default
-                                    </option>
-                                    <option value="dark">Dark</option>
-                                    <option value="dracula">Dracula</option>
-                                    <option value="catpuccin-mocha">
-                                        Catpuccin Mocha
-                                    </option>
-                                    <option value="gruvbox-dark">
-                                        Gruvbox Dark
-                                    </option>
-                                    <option value="nord">Nord</option>
-                                    <option value="rose-pine-moon">
-                                        Rose Pine Moon
-                                    </option>
-                                    <option value="sandevistan">
-                                        Sandevistan
-                                    </option>
-                                    <option value="tokyo-night">
-                                        Tokyo Night
-                                    </option>
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="grid__data">
+                    <div class="grid__headers">
+                        <div class="grid__header">Setting</div>
+                        <div class="grid__header">Value</div>
+                    </div>
+                    <div class="grid__content">
+                        <div class="grid__row">
+                            <div class="grid__cell">Colorscheme</div>
+                            <div class="grid__cell">
+                                <div class="picker__wrap">
+                                    <select
+                                        id="scheme-picker"
+                                        class="picker__select"
+                                    >
+                                        <option value="default" default>
+                                            Default
+                                        </option>
+                                        <option value="dark">Dark</option>
+                                        <option value="catpuccin">
+                                            Catpuccin
+                                        </option>
+                                        <option value="dracula">Dracula</option>
+                                        <option value="everforest">
+                                            Everforest
+                                        </option>
+                                        <option value="gruvbox">Gruvbox</option>
+                                        <option value="nord">Nord</option>
+                                        <option value="rose-pine">
+                                            Rose Pine
+                                        </option>
+                                        <option value="sandevistan">
+                                            Sandevistan
+                                        </option>
+                                        <option value="tokyo-night">
+                                            Tokyo Night
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <template id="tmpl_counts">
-            <tr id="" class="group__record">
-                <td class="group__host"></td>
-                <td class="group__count"></td>
-            </tr>
+            <div id="" class="grid__record">
+                <div class="grid__host"></div>
+                <div class="grid__count"></div>
+            </div>
         </template>
     </body>
 </html>

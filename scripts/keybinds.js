@@ -3,7 +3,7 @@ export default function createCommands(tabState) {
     let rowIdx = -1;
     const tabHeaders = document.querySelectorAll(".tabs li");
     const tabContent = document.querySelectorAll(".tab__content");
-    let tableRows = Array.from(document.querySelectorAll(".group__record"));
+    let tableRows = Array.from(document.querySelectorAll(".grid__record"));
     const msg = document.querySelector("h1 small");
     const selected = {
         gid: null,
@@ -63,9 +63,9 @@ export default function createCommands(tabState) {
             delete tabState.byHost[selected.name];
             rowIdx -= 1;
             // refresh reference
-            tableRows = Array.from(document.querySelectorAll(".group__record"));
+            tableRows = Array.from(document.querySelectorAll(".grid__record"));
         } else {
-            targetRow.querySelector(".group__count").textContent =
+            targetRow.querySelector(".grid__count").textContent =
                 `${diff.length}`;
             const children = targetRow.parentElement.children;
             tabState.byHost[selected.name].ids = diff;
@@ -75,8 +75,8 @@ export default function createCommands(tabState) {
 
         tableRows.sort((a, b) => {
             return (
-                parseInt(b.querySelector(".group__count").textContent) -
-                parseInt(a.querySelector(".group__count").textContent)
+                parseInt(b.querySelector(".grid__count").textContent) -
+                parseInt(a.querySelector(".grid__count").textContent)
             );
         });
         for (const row of tableRows) {
@@ -89,7 +89,9 @@ export default function createCommands(tabState) {
         }
 
         rowIdx = tableRows.indexOf(targetRow);
-        document.querySelector("#sites tbody").replaceChildren(...tableRows);
+        document
+            .querySelector("#sites .grid__content")
+            .replaceChildren(...tableRows);
     }
 
     // just keeps track of the highlighted tab
@@ -114,13 +116,14 @@ export default function createCommands(tabState) {
         deleteTabs(ids);
     }
 
+    // BUG: if active tab is last in list it will only open by itself in a new window
+    // selected.ids.pop() is just a placeholder
     function splitTabs() {
-        const newTabs = [...selected.ids];
-        const tabId = newTabs.pop();
-
-        chrome.windows.create({ tabId, focused: false }, (window) => {
-            chrome.tabs.move(newTabs, { windowId: window.id, index: -1 });
-            chrome.windows.update(tabState.windowId);
+        chrome.windows.create({ tabId: selected.ids.pop() }, (window) => {
+            chrome.tabs.move(selected.ids, {
+                windowId: window.id,
+                index: -1,
+            });
         });
 
         window.close();

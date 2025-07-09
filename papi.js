@@ -66,7 +66,7 @@ async function renderItems(wid) {
     const data = await chrome.storage.local.get(["formatted"]);
 
     if (data) {
-        const sites = document.querySelector("#sites tbody");
+        const sites = document.querySelector("#sites .grid__content");
         const items = Object.entries(data.formatted.byHost).sort(
             (a, b) => b[1].ids.length - a[1].ids.length,
         );
@@ -74,9 +74,9 @@ async function renderItems(wid) {
         for (const item of items) {
             const tmpl = document.getElementById("tmpl_counts");
             const newItem = tmpl.content.cloneNode(true);
-            newItem.querySelector(".group__record").id = item[1].gid;
-            newItem.querySelector(".group__host").textContent = `${item[0]}`;
-            newItem.querySelector(".group__count").textContent =
+            newItem.querySelector(".grid__record").id = item[1].gid;
+            newItem.querySelector(".grid__host").textContent = `${item[0]}`;
+            newItem.querySelector(".grid__count").textContent =
                 `${item[1].ids.length}`;
 
             sites.appendChild(newItem);

@@ -1,74 +1,94 @@
 @use "sass:map";
 $color-schemes: (
     default: (
-        primary: #c4a7e7,
-        secondary: #9ccfd8,
+        primary: #0366d6,
+        secondary: #28a745,
+        accent: #f66a0a,
+        background: #ffffff,
+        surface: #f6f8fa,
+        overlay: #e1e4e8,
+        text: #24292e,
+        text-secondary: #586069,
+        text-tertiary: #6a737d,
+        border: #e1e4e8,
+        success: #28a745,
+        warning: #ffd33d,
+        error: #d73a49,
+    ),
+    dark: (
+        primary: #ff8c42,
+        secondary: #a1a1aa,
+        accent: #ffa726,
+        background: #0a0a0a,
+        surface: #171717,
+        overlay: #262626,
+        text: #fafafa,
+        text-secondary: #a1a1aa,
+        text-tertiary: #171717,
+        border: #404040,
+        success: #22c55e,
+        warning: #f59e0b,
+        error: #ef4444,
+    ),
+    everforest: (
+        primary: #a7c080,
+        secondary: #7fbbb3,
+        accent: #e69875,
+        background: #2b3339,
+        surface: #323c41,
+        overlay: #3a454a,
+        text: #d3c6aa,
+        text-secondary: #9da9a0,
+        text-tertiary: #323c41,
+        border: #4c555b,
+        success: #a7c080,
+        warning: #dbbc7f,
+        error: #e67e80,
+    ),
+    rose-pine: (
+        primary: #ea9a97,
+        secondary: #3e8fb0,
         accent: #f6c177,
         background: #232136,
         surface: #2a273f,
         overlay: #393552,
         text: #e0def4,
         text-secondary: #908caa,
-        text-tertiary: #232136,
+        text-tertiary: #2a273f,
         border: #44415a,
         success: #9ccfd8,
         warning: #f6c177,
         error: #eb6f92,
-        // pine: #3e8fb0,
-         // rose: #ea9a97,
     ),
-    rose-pine-moon: (
-        primary: #c4a7e7,
-        secondary: #9ccfd8,
-        accent: #f6c177,
-        background: #232136,
-        surface: #2a273f,
-        overlay: #393552,
-        text: #e0def4,
-        text-secondary: #908caa,
-        text-tertiary: #232136,
-        border: #44415a,
-        success: #9ccfd8,
-        warning: #f6c177,
-        error: #eb6f92,
-        // pine: #3e8fb0,
-         // rose: #ea9a97,
-    ),
-    catpuccin-mocha: (
-        primary: #cba6f7,
+    catpuccin: (
+        primary: #f38ba8,
         secondary: #89b4fa,
-        accent: #f9e2af,
+        accent: #fab387,
         background: #1e1e2e,
         surface: #313244,
         overlay: #45475a,
         text: #cdd6f4,
         text-secondary: #bac2de,
-        text-tertiary: #1e1e2e,
+        text-tertiary: #313244,
         border: #585b70,
         success: #a6e3a1,
         warning: #f9e2af,
         error: #f38ba8,
-        // lavender: #b4befe,
-        // peach: #fab387,
-         // teal: #94e2d5,
     ),
     tokyo-night: (
         primary: #7aa2f7,
-        secondary: #bb9af7,
+        secondary: #9ece6a,
         accent: #e0af68,
         background: #1a1b26,
         surface: #24283b,
         overlay: #414868,
         text: #c0caf5,
         text-secondary: #9aa5ce,
-        text-tertiary: #1a1b26,
+        text-tertiary: #24283b,
         border: #3b4261,
         success: #9ece6a,
         warning: #e0af68,
         error: #f7768e,
-        // cyan: #7dcfff,
-        // magenta: #bb9af7,
-         // orange: #ff9e64,
     ),
     nord: (
         primary: #5e81ac,
@@ -84,11 +104,8 @@ $color-schemes: (
         success: #a3be8c,
         warning: #ebcb8b,
         error: #bf616a,
-        // purple: #b48ead,
-        // orange: #d08770,
-         // frost: #8fbcbb
     ),
-    gruvbox-dark: (
+    gruvbox: (
         primary: #458588,
         secondary: #689d6a,
         accent: #d79921,
@@ -102,47 +119,36 @@ $color-schemes: (
         success: #98971a,
         warning: #d79921,
         error: #cc241d,
-        // purple: #b16286,
-        // orange: #d65d0e,
-         // gray: #928374
     ),
     dracula: (
-        primary: #bd93f9,
-        secondary: #8be9fd,
-        accent: #50fa7b,
+        primary: #ff79c6,
+        secondary: #50fa7b,
+        accent: #8be9fd,
         background: #282a36,
         surface: #44475a,
         overlay: #6272a4,
         text: #f8f8f2,
-        text-secondary: #6272a4,
-        text-tertiary: #282a36,
+        text-secondary: #bd93f9,
+        text-tertiary: #44475a,
         border: #44475a,
         success: #50fa7b,
         warning: #f1fa8c,
         error: #ff5555,
-        // pink: #ff79c6,
-        // orange: #ffb86c,
-         // selection: #44475a
     ),
-
     sandevistan: (
-        primary: #001eff,
+        primary: #f8e602,
         secondary: #00ff9f,
         accent: #00b8ff,
         background: #020d20,
-        // background2: #00b8ff,
         surface: #d600ff,
         overlay: #bd00ff,
         text: #f8e602,
-        text-secondary: #6272a4,
+        text-secondary: #001eff,
         text-tertiary: #282a36,
         border: #f8e602,
         success: #50fa7b,
         warning: #f1fa8c,
         error: #ff5555,
-        // pink: #ff79c6,
-        // orange: #ffb86c,
-         // selection: #44475a
     ),
 );
 
@@ -162,12 +168,20 @@ $color-schemes: (
     @include color-scheme(default);
 }
 
-.theme-rose-pine-moon {
-    @include color-scheme(rose-pine-moon);
+.theme-dark {
+    @include color-scheme(dark);
 }
 
-.theme-catpuccin-mocha {
-    @include color-scheme(catpuccin-mocha);
+.theme-everforest {
+    @include color-scheme(everforest);
+}
+
+.theme-rose-pine {
+    @include color-scheme(rose-pine);
+}
+
+.theme-catpuccin {
+    @include color-scheme(catpuccin);
 }
 
 .theme-tokyo-night {
@@ -178,14 +192,14 @@ $color-schemes: (
     @include color-scheme(nord);
 }
 
-.theme-gruvbox-dark {
-    @include color-scheme(gruvbox-dark);
+.theme-gruvbox {
+    @include color-scheme(gruvbox);
 }
 
 .theme-dracula {
     @include color-scheme(dracula);
 }
 
-// .theme-sandevistan {
-//     @include color-scheme(sandevistan);
-// }
+.theme-sandevistan {
+    @include color-scheme(sandevistan);
+}
