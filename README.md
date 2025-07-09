@@ -6,6 +6,11 @@ Use the predefined keybinds to tidy the tabs in any browser window.
 
 If you are a keyboard-focused computer user, you might like this.
 
+## Installation
+
+- Chrome Web Store (tba)
+- clone this repo and add this extension in developer mode
+
 ## Keybinds
 
 The first thing I recommend is to create a keybind to activate Papi.
