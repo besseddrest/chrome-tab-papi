@@ -24,7 +24,7 @@ command.
 | Bind | Desc |
 | -------- | ------- |
 | Tab | Toggle btwn List/Info content |
-| Up, Down, j, k | Select/highlight group tabs by hostname |
+| ↑, ↓, j, k | Select/highlight group tabs by hostname |
 
 ### Actions
 
@@ -32,11 +32,11 @@ command.
 
 | Bind | Desc |
 | -------- | ------- |
-| Left, Right, h, l | Shift all group tabs to start or end |
+| ←, →, h, l | Shift all group tabs to start or end |
 | d | Delete all group tabs |
 | o | Open all group tabs in new window |
 | r | Reduce group tabs TO 1 - the most recent is preserved (I think)
-| 1, 2, 3, 4 | Reduce group tabs BY # - oldest tabs are removed first
+| 1-4 | Reduce group tabs BY # - oldest tabs are removed first
 
 ## Settings
 
@@ -46,12 +46,14 @@ auto-save/auto-update Tab Papi
 
 - default
 - dark
-- Rose Pine Moon
-- Catpuccin Mocha
-- Tokyo Night
-- Nord
-- Gruvbox dark
+- Catpuccin
 - Dracula
+- Everforest
+- Gruvbox
+- Nord
+- Rose Pine
+- Sandevistan (experimental)
+- Tokyo Night
 
 ## Accessibility
 
@@ -62,6 +64,18 @@ I'll consider adding support for mouse events if there's enough interest, but
 off the top of my head this will prob require some design adjustments to
 preserve some parity of experience between keyboard-focused vs balanced
 users.
+
+## Known Bugs
+
+If the active tab:
+
+- is in selected group
+- is last in that group
+- and number of tabs in selected group is > 1
+
+the tab will only open by itself if you try to open the group in a new window.
+Somehow if the active tab is in any other position or by itself, it works as
+expected.
 
 ## TODO
 

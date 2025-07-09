@@ -119,14 +119,16 @@ export default function createCommands(tabState) {
     // BUG: if active tab is last in list it will only open by itself in a new window
     // selected.ids.pop() is just a placeholder
     function splitTabs() {
-        chrome.windows.create({ tabId: selected.ids.pop() }, (window) => {
-            chrome.tabs.move(selected.ids, {
-                windowId: window.id,
-                index: -1,
+        if (document.querySelector("#sites .selected")) {
+            chrome.windows.create({ tabId: selected.ids.pop() }, (window) => {
+                chrome.tabs.move(selected.ids, {
+                    windowId: window.id,
+                    index: -1,
+                });
             });
-        });
 
-        window.close();
+            window.close();
+        }
     }
 
     function moveTabsLeft() {
