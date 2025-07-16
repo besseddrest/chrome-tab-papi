@@ -30,6 +30,21 @@ $color-schemes: (
         warning: #f59e0b,
         error: #ef4444,
     ),
+    cyberpunk: (
+        primary: #04d9e0,
+        secondary: #5489db,
+        accent: #d74448,
+        background: #030c14,
+        surface: #1f111c,
+        overlay: #241c2c,
+        text: #6d6d71,
+        text-secondary: #5489db,
+        text-tertiary: #04d9e0,
+        border: #d74448,
+        success: #22c55e,
+        warning: #f59e0b,
+        error: #ef4444,
+    ),
     everforest: (
         primary: #a7c080,
         secondary: #7fbbb3,
@@ -170,6 +185,10 @@ $color-schemes: (
 
 .theme-dark {
     @include color-scheme(dark);
+}
+
+.theme-cyberpunk {
+    @include color-scheme(cyberpunk);
 }
 
 .theme-everforest {

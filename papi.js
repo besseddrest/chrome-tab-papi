@@ -7,7 +7,6 @@ import createCommands from "./scripts/keybinds.js";
 const initPapi = () => {
     document.addEventListener("DOMContentLoaded", async () => {
         let formatted = null;
-        // fetch and process tab data
         const tabs = await getTabs();
 
         if (tabs) {
@@ -23,15 +22,14 @@ const initPapi = () => {
 
         const userConfig = await chrome.storage.sync.get(["user"]);
 
-        if (!userConfig) {
+        if (userConfig) {
             const conf = {
-                theme: "default",
-                font: "default",
+                theme: userConfig.user ? userConfig.user.theme : "default",
+                font: userConfig.user ? userConfig.user.font : "default",
             };
 
             await chrome.storage.sync.set({ user: conf });
-        } else {
-            setColorScheme(userConfig.user.theme);
+            setColorScheme(conf.theme);
         }
 
         const scheme = document.getElementById("scheme-picker");
@@ -72,14 +70,14 @@ async function renderItems(wid) {
         );
 
         for (const item of items) {
-            const tmpl = document.getElementById("tmpl_counts");
-            const newItem = tmpl.content.cloneNode(true);
-            newItem.querySelector(".grid__record").id = item[1].gid;
-            newItem.querySelector(".grid__host").textContent = `${item[0]}`;
-            newItem.querySelector(".grid__count").textContent =
-                `${item[1].ids.length}`;
-
-            sites.appendChild(newItem);
+            const row = document.createElement("div");
+            row.classList.add("grid__record");
+            row.id = item[1].gid;
+            row.innerHTML = `
+                <div class="grid__host">${item[0]}</div>
+                <div class="grid__count">${item[1].ids.length}</div>
+            `;
+            sites.appendChild(row);
         }
     }
 

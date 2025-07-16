@@ -31,6 +31,22 @@
   --color-error: #ef4444;
 }
 
+.theme-cyberpunk {
+  --color-primary: #04d9e0;
+  --color-secondary: #5489db;
+  --color-accent: #d74448;
+  --color-background: #030c14;
+  --color-surface: #1f111c;
+  --color-overlay: #241c2c;
+  --color-text: #6d6d71;
+  --color-text-secondary: #5489db;
+  --color-text-tertiary: #04d9e0;
+  --color-border: #404040;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
 .theme-everforest {
   --color-primary: #a7c080;
   --color-secondary: #7fbbb3;
