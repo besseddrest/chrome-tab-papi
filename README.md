@@ -38,10 +38,11 @@ command.
 | Bind | Desc |
 | -------- | ------- |
 | ←, →, h, l | Shift all group tabs to start or end |
-| d | Delete all group tabs |
-| o | Open all group tabs in new window |
-| r | Reduce group tabs TO 1 - the most recent is preserved (I think)
-| 1-4 | Reduce group tabs BY # - oldest tabs are removed first
+| x | Mark row |
+| d | Delete selected & marked |
+| s | Separate selected & marked |
+| r | Reduce group tabs TO 1 (selected only, keeps newest) |
+| 1-4 | Reduce group tabs BY # (selected only, deletes oldest) |
 
 ## Settings
 
