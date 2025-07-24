@@ -41,7 +41,7 @@
   --color-text: #6d6d71;
   --color-text-secondary: #5489db;
   --color-text-tertiary: #04d9e0;
-  --color-border: #404040;
+  --color-border: #d74448;
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
@@ -300,6 +300,9 @@ h1 .hide {
 .grid__record.selected, .grid__row.selected {
   background-color: var(--color-accent);
   color: var(--color-text-tertiary);
+}
+.grid__record.marked, .grid__row.marked {
+  border-left: 5px solid var(--color-secondary);
 }
 .grid__record > div, .grid__row > div {
   display: block;

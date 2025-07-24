@@ -10,6 +10,7 @@ export default function createCommands(tabState) {
         name: "",
         ids: [],
     };
+    let marked = [];
 
     // ░█▀▄░▀█▀░█▀█░█▀▄░█▀▀
     // ░█▀▄░░█░░█░█░█░█░▀▀█
@@ -26,7 +27,8 @@ export default function createCommands(tabState) {
         l: () => moveTabsRight(),
         d: () => deleteTabsAll(), // delete all tabs
         r: () => reduceTabs(), // reduce TO 1
-        o: () => splitTabs(), // open all tabs in new window
+        x: () => mark(), // marks entry for separation
+        s: () => separate(), //
         1: () => reduceTabsBy(1), // reduce tabs BY #
         2: () => reduceTabsBy(2),
         3: () => reduceTabsBy(3),
@@ -61,13 +63,30 @@ export default function createCommands(tabState) {
         if (diff.length === 0) {
             targetRow.remove();
             delete tabState.byHost[selected.name];
+
+            if (marked.length > 0) {
+                for (const name of marked) {
+                    delete tabState.byHost[name];
+
+                    const otherRow = tableRows.find(
+                        (el) =>
+                            el.querySelector(".grid__host").textContent ===
+                            name,
+                    );
+
+                    if (otherRow) {
+                        otherRow.remove();
+                    }
+                }
+                marked = [];
+            }
+
             rowIdx -= 1;
             // refresh reference
             tableRows = Array.from(document.querySelectorAll(".grid__record"));
         } else {
             targetRow.querySelector(".grid__count").textContent =
                 `${diff.length}`;
-            const children = targetRow.parentElement.children;
             tabState.byHost[selected.name].ids = diff;
         }
 
@@ -116,16 +135,45 @@ export default function createCommands(tabState) {
         deleteTabs(ids);
     }
 
+    function mark() {
+        if (selected.gid) {
+            const temp = document.querySelector("#sites .selected");
+
+            console.log(marked);
+            if (!temp.classList.contains("marked")) {
+                temp.classList.add("marked");
+                marked.push(selected.name);
+            } else {
+                const idx = marked.indexOf(selected.name);
+                temp.classList.remove("marked");
+                marked.splice(idx, 1);
+            }
+        }
+    }
+
     // BUG: if active tab is last in list it will only open by itself in a new window
     // selected.ids.pop() is just a placeholder
-    function splitTabs() {
+    function separate() {
         if (document.querySelector("#sites .selected")) {
+            const temp = [];
+
+            if (marked.length > 0) {
+                for (const row of tableRows) {
+                    row.classList.remove("marked");
+                }
+                for (const name of marked) {
+                    temp.push(...tabState.byHost[name].ids);
+                }
+            }
+
             chrome.windows.create({ tabId: selected.ids.pop() }, (window) => {
-                chrome.tabs.move(selected.ids, {
+                chrome.tabs.move([...selected.ids, ...temp], {
                     windowId: window.id,
                     index: -1,
                 });
             });
+
+            marked = [];
 
             window.close();
         }
@@ -144,7 +192,15 @@ export default function createCommands(tabState) {
     }
 
     function deleteTabsAll() {
-        deleteTabs(selected.ids);
+        const temp = [...selected.ids];
+
+        if (marked.length > 0) {
+            for (const name of marked) {
+                temp.push(...tabState.byHost[name].ids);
+            }
+        }
+
+        deleteTabs(temp);
     }
 
     async function deleteTabs(ids) {
