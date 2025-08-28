@@ -175,10 +175,16 @@
   --color-error: #ff5555;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
-  border: none;
-  background: transparent;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -186,8 +192,7 @@ body {
   color: var(--color-text);
   width: 360px;
   max-width: 360px;
-  height: auto;
-  padding: 0 5px;
+  margin: 10px;
 }
 
 h1,
@@ -205,9 +210,6 @@ h1 small {
   font-size: 14px;
   position: absolute;
   right: 0;
-}
-h1 .hide {
-  display: none;
 }
 
 .grid__host {
@@ -360,4 +362,4 @@ h1 .hide {
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-/*# sourceMappingURL=papi.css.map */
+/*# sourceMappingURL=daddy.css.map */

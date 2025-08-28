@@ -1,9 +1,15 @@
 @use "themes";
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 html,
 body {
-    border: none;
-    background: transparent;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -11,8 +17,7 @@ body {
     color: var(--color-text);
     width: 360px;
     max-width: 360px;
-    height: auto;
-    padding: 0 5px;
+    margin: 10px;
 }
 
 h1,
@@ -30,9 +35,6 @@ h1 {
         font-size: 14px;
         position: absolute;
         right: 0;
-    }
-    .hide {
-        display: none;
     }
 }
 

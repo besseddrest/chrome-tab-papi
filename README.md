@@ -1,89 +1,60 @@
-# Tab Papi (Google Chrome)
+# Tab Daddy (Google Chrome)
 
 Blazingly-fast tab management from your keyboard.
 
-Use the predefined keybinds to tidy the tabs in any browser window.
-
-If you are a keyboard-focused computer user, you might like this.
+If you are vim user, you might like this.
 
 ## Installation
 
-- Chrome Web Store (tba)
-- clone this repo and add this extension in developer mode
+You can add this extension via Chrome Web Store; or clone this repo and manually
+upload & enable it in Developer mode.
 
 ## Keybinds
 
-The first thing I recommend is to create a keybind to activate Papi.
+First, create a bind to open Tab Daddy
 
 - Click **Manage Extensions**
 - Click **Keyboard shortcuts**
-- Under Tab Papi, add your keyboard shortcut for **Activate the extension**
-
-I prefer `Ctrl+P`, though keep in mind this might clash with your browser's 'Print'
-command.
-
-**Note:** Keybinds apply only to current window, and only when Papi is activated
+- Under Tab Daddy, add your keyboard shortcut to **Activate the extension**
 
 ### Movement
 
 | Bind | Desc |
 | -------- | ------- |
-| Tab | Toggle btwn List/Info content |
+| Tab | Cycle the tabbed content in popup |
 | ↑, ↓, j, k | Select/highlight group tabs by hostname |
 
 ### Actions
 
-**Note:** The current/visible tab will always remain open
-
 | Bind | Desc |
 | -------- | ------- |
-| ←, →, h, l | Shift all group tabs to start or end |
+| ←, →, h, l | Move to start/end |
 | x | Mark row |
-| d | Delete selected & marked |
-| s | Separate selected & marked |
-| r | Reduce group tabs TO 1 (selected only, keeps newest) |
-| 1-4 | Reduce group tabs BY # (selected only, deletes oldest) |
+| d | Delete all |
+| s | Separate all |
+| r | Reduce TO 1 (selected only, keeps newest) |
+| 1-4 | Reduce BY # (selected only, deletes oldest) |
+
+## Marks vs Selected Row
+
+- Actions will always be performed on the selected row
+- Marked rows will be included in those actions
 
 ## Settings
 
-The following color schemes are available, and should persist (you might have to
-be logged-in to your browser account). Changing these settings will
-auto-save/auto-update Tab Papi
+Adds a colorscheme to Tab Daddy. This is saved in sync storage and will persist.
 
 - default
 - dark
 - Catpuccin
+- Cyberpunk 2077
 - Dracula
 - Everforest
 - Gruvbox
 - Nord
 - Rose Pine
-- Sandevistan (experimental)
 - Tokyo Night
-
-## Accessibility
-
-At the core of this project is having all control from your keyboard. Obviously,
-this is an accessibility issue.
-
-I'll consider adding support for mouse events if there's enough interest, but
-off the top of my head this will prob require some design adjustments to
-preserve some parity of experience between keyboard-focused vs balanced
-users.
-
-## Known Bugs
-
-If the active tab:
-
-- is in selected group
-- is last in that group
-- and number of tabs in selected group is > 1
-
-the tab will only open by itself if you try to open the group in a new window.
-Somehow if the active tab is in any other position or by itself, it works as
-expected.
 
 ## TODO
 
-- Papi for Gecko based browsers
-- mouse support...
+- Tab Papi for Gecko based browsers

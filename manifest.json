@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
-    "name": "Tab Papi",
-    "version": "1.0.0",
-    "description": "Nanage your excessive tabs with blazingly-fast speed, with just a few simple keybindings.",
+    "name": "Tab Daddy",
+    "version": "0.1.0",
+    "description": "Blazingly fast tab management via your keyboard",
     "action": {
-        "default_popup": "papi.html",
+        "default_popup": "index.html",
         "default_icon": "images/papi_128.png"
     },
     "permissions": [

@@ -1,10 +1,6 @@
-import createCommands from "./scripts/keybinds.js";
+import initKeybinds from "./scripts/keybinds.js";
 
-/**
- * I think these are all run only once, when you open Tab Papi
- * The DOM and localstorage is updated actively until you close Papi
- */
-const initPapi = () => {
+const initDaddy = () => {
     document.addEventListener("DOMContentLoaded", async () => {
         let formatted = null;
         const tabs = await getTabs();
@@ -16,7 +12,7 @@ const initPapi = () => {
 
             const currentWin = await chrome.windows.getCurrent();
             renderItems(currentWin.id).then((res) => {
-                createCommands(res.formatted, currentWin.id);
+                initKeybinds(res.formatted, currentWin.id);
             });
         }
 
@@ -126,4 +122,4 @@ async function getTabs() {
     return response;
 }
 
-initPapi();
+initDaddy();

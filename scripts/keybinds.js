@@ -1,45 +1,41 @@
-export default function createCommands(tabState) {
-    let tabIdx = 0;
-    let rowIdx = -1;
+// ░█░█░█▀▀░█░█░█▀▄░▀█▀░█▀█░█▀▄░█▀▀
+// ░█▀▄░█▀▀░░█░░█▀▄░░█░░█░█░█░█░▀▀█
+// ░▀░▀░▀▀▀░░▀░░▀▀░░▀▀▀░▀░▀░▀▀░░▀▀▀
+
+let tabIdx = 0;
+let rowIdx = -1;
+const selected = {
+    gid: null,
+    name: "",
+    ids: [],
+};
+let marked = [];
+
+export default function initKeybinds(tabState) {
     const tabHeaders = document.querySelectorAll(".tabs li");
     const tabContent = document.querySelectorAll(".tab__content");
     let tableRows = Array.from(document.querySelectorAll(".grid__record"));
-    const msg = document.querySelector("h1 small");
-    const selected = {
-        gid: null,
-        name: "",
-        ids: [],
-    };
-    let marked = [];
-
-    // ░█▀▄░▀█▀░█▀█░█▀▄░█▀▀
-    // ░█▀▄░░█░░█░█░█░█░▀▀█
-    // ░▀▀░░▀▀▀░▀░▀░▀▀░░▀▀▀
 
     const keybinds = {
         ArrowUp: () => navigateUp(),
         ArrowDown: () => navigateDown(),
-        ArrowLeft: () => moveTabsLeft(),
-        ArrowRight: () => moveTabsRight(),
-        h: () => moveTabsLeft(),
+        ArrowLeft: () => moveTabs("left"),
+        ArrowRight: () => moveTabs("right"),
+        h: () => moveTabs("left"),
         k: () => navigateUp(),
         j: () => navigateDown(),
-        l: () => moveTabsRight(),
-        d: () => deleteTabsAll(), // delete all tabs
-        r: () => reduceTabs(), // reduce TO 1
-        x: () => mark(), // marks entry for separation
-        s: () => separate(), //
-        1: () => reduceTabsBy(1), // reduce tabs BY #
+        l: () => moveTabs("right"),
+        d: () => deleteTabsAll(),
+        r: () => reduceTabs(),
+        x: () => addMark(),
+        s: () => separate(),
+        1: () => reduceTabsBy(1),
         2: () => reduceTabsBy(2),
         3: () => reduceTabsBy(3),
         4: () => reduceTabsBy(4),
-        Tab: () => cycleContent(), // toggles btwn List / Info
+        Tab: () => cycleContent(),
         Escape: () => window.close(),
     };
-
-    // ░█▀▀░█░█░█▀▀░█▀█░▀█▀░█▀▀
-    // ░█▀▀░▀▄▀░█▀▀░█░█░░█░░▀▀█
-    // ░▀▀▀░░▀░░▀▀▀░▀░▀░░▀░░▀▀▀
 
     document.addEventListener("keydown", (ev) => {
         if (!keybinds.hasOwnProperty(ev.key)) return;
@@ -50,13 +46,9 @@ export default function createCommands(tabState) {
         ev.stopPropagation();
     });
 
-    // ░█▀▀░█▀▀░█▀█░█▀▀░█▀▄░█▀█░█░░
-    // ░█░█░█▀▀░█░█░█▀▀░█▀▄░█▀█░█░░
-    // ░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀
-
-    // change the DOM directly rather than fetching tab data
+    // Updates the DOM after action by editing the popup DOM directly
     function updateDOM(ids) {
-        // remaining tabs for selected
+        // when we reduceTabsBy, keep track of remaining so we can update count
         const diff = [...selected.ids].filter((item) => !ids.includes(item));
         const targetRow = document.getElementById(`${selected.gid}`);
 
@@ -90,14 +82,13 @@ export default function createCommands(tabState) {
             tabState.byHost[selected.name].ids = diff;
         }
 
-        // TODO: sort the list since we've closed some tabs to preserve descending order before replacing in dom
-
         tableRows.sort((a, b) => {
             return (
                 parseInt(b.querySelector(".grid__count").textContent) -
                 parseInt(a.querySelector(".grid__count").textContent)
             );
         });
+
         for (const row of tableRows) {
             if (row.classList.contains("selected")) {
                 row.classList.remove("selected");
@@ -113,7 +104,20 @@ export default function createCommands(tabState) {
             .replaceChildren(...tableRows);
     }
 
-    // just keeps track of the highlighted tab
+    function getMarkedTabIds() {
+        if (marked.length === 0) {
+            return [];
+        }
+        const ids = [];
+
+        for (const name of marked) {
+            ids.push(...tabState.byHost[name].ids);
+        }
+
+        return ids;
+    }
+
+    // just keeps track of the highlighted/selected row
     // TODO: this needs to update based on the DOM, not localstorage
     function updateState(gid) {
         for (const [key, value] of Object.entries(tabState.byHost)) {
@@ -126,20 +130,15 @@ export default function createCommands(tabState) {
         }
     }
 
-    // ░█▀█░█▀▀░▀█▀░▀█▀░█▀█░█▀█░█▀▀
-    // ░█▀█░█░░░░█░░░█░░█░█░█░█░▀▀█
-    // ░▀░▀░▀▀▀░░▀░░▀▀▀░▀▀▀░▀░▀░▀▀▀
-
     function reduceTabsBy(num) {
         const ids = selected.ids.splice(0, num);
         deleteTabs(ids);
     }
 
-    function mark() {
+    function addMark() {
         if (selected.gid) {
             const temp = document.querySelector("#sites .selected");
 
-            console.log(marked);
             if (!temp.classList.contains("marked")) {
                 temp.classList.add("marked");
                 marked.push(selected.name);
@@ -151,43 +150,52 @@ export default function createCommands(tabState) {
         }
     }
 
-    // BUG: if active tab is last in list it will only open by itself in a new window
-    // selected.ids.pop() is just a placeholder
+    // Takes selected group and marked groups (if any) and opens in a new window
+    // There's an edge case where the active tab doesn't play nice, so the new
+    // window opens with a New Tab, we move the tabs, then remove the New Tab
+    // kinda easier this way, TBH
     function separate() {
         if (document.querySelector("#sites .selected")) {
-            const temp = [];
+            let temp = [...selected.ids];
 
             if (marked.length > 0) {
+                temp = [];
                 for (const row of tableRows) {
                     row.classList.remove("marked");
                 }
                 for (const name of marked) {
                     temp.push(...tabState.byHost[name].ids);
                 }
+
+                marked = [];
             }
 
-            chrome.windows.create({ tabId: selected.ids.pop() }, (window) => {
-                chrome.tabs.move([...selected.ids, ...temp], {
+            // creates a new window but with a default 'New Tab'
+            chrome.windows.create({ focused: true }, async (window) => {
+                chrome.tabs.move(temp, {
                     windowId: window.id,
                     index: -1,
                 });
-            });
 
-            marked = [];
+                const newTab = window.tabs[0].id;
+                // so we delete it
+                chrome.tabs.remove(newTab);
+            });
 
             window.close();
         }
     }
 
-    function moveTabsLeft() {
-        chrome.tabs.move(selected.ids, {
-            index: 0,
-        });
-    }
+    function moveTabs(dir) {
+        const ids = getMarkedTabIds();
+        const direction = dir === "left" ? 0 : -1;
 
-    function moveTabsRight() {
-        chrome.tabs.move(selected.ids, {
-            index: -1,
+        if (marked.indexOf(selected.name) === -1) {
+            ids.push(...selected.ids);
+        }
+
+        chrome.tabs.move(ids, {
+            index: direction,
         });
     }
 
@@ -204,12 +212,6 @@ export default function createCommands(tabState) {
     }
 
     async function deleteTabs(ids) {
-        msg.classList.remove("hide");
-
-        setTimeout(() => {
-            msg.classList.add("hide");
-        }, 100);
-
         const [currentTab] = await chrome.tabs.query({
             active: true,
             currentWindow: true,
@@ -224,10 +226,6 @@ export default function createCommands(tabState) {
         const tmp = selected.ids.slice(0, selected.ids.length - 1);
         deleteTabs(tmp);
     }
-
-    // ░█▄█░█▀█░█░█░█▀▀░█▄█░█▀▀░█▀█░▀█▀
-    // ░█░█░█░█░▀▄▀░█▀▀░█░█░█▀▀░█░█░░█░
-    // ░▀░▀░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░
 
     function cycleContent() {
         const prev = tabIdx;
